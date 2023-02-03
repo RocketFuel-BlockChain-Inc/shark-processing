@@ -5,31 +5,31 @@
     this.iframeInfo = {
       iframe: null,
       iframeData: null,
-      iFrameId: 'Rocketfuel',
+      iFrameId: 'Shark_Processing',
       iframeUrl: {
-        prod: `https://iframe.rocketfuelblockchain.com`,
+        prod: `https://iframe.shark_processingblockchain.com`,
         stage2: `https://qa-iframe.rocketdemo.net/`,
         local: `http://192.168.0.181:8080/`,
 
         preprod: `https://preprod-iframe.rocketdemo.net/`,
         dev: `https://dev-iframe.rocketdemo.net/`,
-        sandbox: `https://iframe-sandbox.rocketfuelblockchain.com`,
+        sandbox: `https://iframe-sandbox.shark_processingblockchain.com`,
       },
       isOverlay: false
     };
     this.domain = {
-      prod: `https://app.rocketfuelblockchain.com/api`,
+      prod: `https://app.shark_processingblockchain.com/api`,
       stage2: `https://qa-app.rocketdemo.net/api`,
       local: `http://c334-102-89-45-112.ngrok.io/api`,
       preprod: `https://preprod-app.rocketdemo.net/api`,
       dev: 'https://dev-app.rocketdemo.net/api',
-      sandbox: `https://app-sandbox.rocketfuelblockchain.com/api`,
+      sandbox: `https://app-sandbox.shark_processingblockchain.com/api`,
     };
     window.iframeInfo = this.iframeInfo;
-    this.rkflToken = null
+    this.shark_processingToken = null
     var rocketFuelDefaultOptions = {
       uuid: null,
-      token: null,  //rkfltoken 
+      token: null,  //shark_processingtoken 
       callback: null,
       merchantAuth: null,
       environment: 'prod',
@@ -128,33 +128,33 @@
     const purchaseResp = await fetch(`${apiDomain}/purchase`, checkoptions);
     return purchaseResp;
   }
-  this.RocketFuel.prototype.rkflAutoSignUp = async function (data, env) {
+  this.RocketFuel.prototype.shark_processingAutoSignUp = async function (data, env) {
 
 
 
-    const rkflToken = await autoSignUp(data, this.domain, env);
-    if (!rkflToken || !rkflToken.ok) {
+    const shark_processingToken = await autoSignUp(data, this.domain, env);
+    if (!shark_processingToken || !shark_processingToken.ok) {
       removeLocalStorage();
-    setLocalStorage('rkfl_email', rkflToken.data.email);
+    setLocalStorage('shark_processing_email', shark_processingToken.data.email);
 
       
       return null
     }
-    setLocalStorage('access', rkflToken.result.access);
-    setLocalStorage('refresh', rkflToken.result.refresh);
-    if (rkflToken.result.rkflToken) {
-      setLocalStorage('rkfl_token', rkflToken.result.rkflToken);
+    setLocalStorage('access', shark_processingToken.result.access);
+    setLocalStorage('refresh', shark_processingToken.result.refresh);
+    if (shark_processingToken.result.shark_processingToken) {
+      setLocalStorage('shark_processing_token', shark_processingToken.result.shark_processingToken);
     }
 
-    setLocalStorage('rkfl_status', rkflToken.result.status);
+    setLocalStorage('shark_processing_status', shark_processingToken.result.status);
 
 
-    this.rkflToken = rkflToken;
+    this.shark_processingToken = shark_processingToken;
 
     if (data && data.merchantAuth) {
       setLocalStorage('merchant_auth', data.merchantAuth);
     }
-    return rkflToken
+    return shark_processingToken
   }
 
   //private methods
@@ -203,7 +203,7 @@
   }
   function initializeEvents(iframeInfo, rocketFuelDefaultOptions) {
     window.addEventListener("message", async (event) => {
-      if (event.data.type === "rocketfuel_new_height") {
+      if (event.data.type === "shark_processing_new_height") {
         const iframe = document.getElementById(iframeInfo.iFrameId);
         if (!!iframe) {
           const windowHeight = window.innerHeight - 20;
@@ -211,7 +211,7 @@
             iframe.style.height = windowHeight + "px";
             iframe.contentWindow.postMessage(
               {
-                type: "rocketfuel_max_height",
+                type: "shark_processing_max_height",
                 data: windowHeight,
               },
               "*"
@@ -221,14 +221,14 @@
           }
         }
       }
-      if (event.data.type === "rocketfuel_change_height") {
+      if (event.data.type === "shark_processing_change_height") {
         document.getElementById(iframeInfo.iFrameId).style.height = event.data.data;
       }
 
-      if (event.data.type === "rocketfuel_get_cart") {
+      if (event.data.type === "shark_processing_get_cart") {
         await sendCartToIframe();
       }
-      if (event.data.type === "rocketfuel_iframe_close") {
+      if (event.data.type === "shark_processing_iframe_close") {
         closeOverlay(iframeInfo);
         // if(window.paymentdone && window.redirectUrl) {
         if (window.redirectUrl) {
@@ -239,7 +239,7 @@
         console.log('[PUSH_MESSAGE_TO_ANDROID]', window.Android && window.Android.shareData(JSON.stringify(event.data)));
         window.Android && window.Android.shareData(JSON.stringify(event.data));
       }
-      if (event.data.type === "rocketfuel_result_ok") {
+      if (event.data.type === "shark_processing_result_ok") {
         window.paymentdone = true;
         if (rocketFuelDefaultOptions.callback) {
           rocketFuelDefaultOptions.callback(event.data.response);
@@ -293,9 +293,9 @@
             }
 
             if (iframeResp.result.returnval.customerInfo
-              && iframeResp.result.returnval.customerInfo.rkflToken) {
+              && iframeResp.result.returnval.customerInfo.shark_processingToken) {
               // Invoice SSO
-              setLocalStorage('rkfl_token', iframeResp.result.returnval.customerInfo.rkflToken);
+              setLocalStorage('shark_processing_token', iframeResp.result.returnval.customerInfo.shark_processingToken);
             }
           }
         }
@@ -330,8 +330,8 @@
 
 
 
-    let rkflres = await resp.text()
-    const iframeResp = JSON.parse(rkflres);
+    let shark_processingres = await resp.text()
+    const iframeResp = JSON.parse(shark_processingres);
 
 
     // var requestOptions = {
@@ -339,7 +339,7 @@
     //   headers: myHeaders,
     //   redirect: "follow",
     //   body: JSON.stringify({
-    //     rkflToken: iframeResp.result.rkflToken,
+    //     shark_processingToken: iframeResp.result.shark_processingToken,
     //     merchantAuth: rocketFuelDefaultOptions.merchantAuth,
     //     skipMerchantAuth: true
     //   })
@@ -381,7 +381,7 @@
   }
 
   function checkExtension() {
-    return typeof rocketfuel === "object";
+    return typeof shark_processing === "object";
   }
 
   function testIfValidURL(str) {
@@ -401,17 +401,17 @@
 
   function sendCartToIframe(iframe, iframeInfo) {
     if (iframe) {
-      iframeInfo.iframeData.token = localStorage.getItem('rkfl_token') || null;
+      iframeInfo.iframeData.token = localStorage.getItem('shark_processing_token') || null;
       iframeInfo.iframeData.merchantAuth = localStorage.getItem('merchant_auth') || null;
       iframeInfo.iframeData.access = getLocaLStorage('access') || null;
       iframeInfo.iframeData.refresh = getLocaLStorage('refresh') || null;
-      iframeInfo.iframeData.status = getLocaLStorage('rkfl_status') || null;
+      iframeInfo.iframeData.status = getLocaLStorage('shark_processing_status') || null;
       iframeInfo.iframeData.isSSO = true
-      iframeInfo.iframeData.email = getLocaLStorage('rkfl_email') || null;
+      iframeInfo.iframeData.email = getLocaLStorage('shark_processing_email') || null;
 
       iframe.contentWindow.postMessage(
         {
-          type: "rocketfuel_send_cart",
+          type: "shark_processing_send_cart",
           data: iframeInfo.iframeData,
         },
         "*"
@@ -492,10 +492,10 @@
 function removeLocalStorage() {
   localStorage.removeItem('access');
   localStorage.removeItem('refresh');
-  localStorage.removeItem('rkfl_token');
+  localStorage.removeItem('shark_processing_token');
   localStorage.removeItem('merchant_auth');
-  localStorage.removeItem('rkfl_status');
-  localStorage.removeItem('rkfl_email');
+  localStorage.removeItem('shark_processing_status');
+  localStorage.removeItem('shark_processing_email');
 
 }
 removeLocalStorage();

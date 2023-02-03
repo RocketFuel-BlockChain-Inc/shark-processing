@@ -3,12 +3,12 @@
     $(document).ready(() => {
 
         let cacheDefaultPlaceOrder, count = 0;
-        const RKFL_SELECTOR = '#rocketfuel_retrigger_payment_button';
+        const SH_PR_SELECTOR = '#shark_processing_retrigger_payment_button';
 
         const intButn = setInterval(() => {
 
             try {
-                if ($('#place_order') && $('#place_order').attr('style').includes('display:none') && !$(RKFL_SELECTOR).attr('style')) {
+                if ($('#place_order') && $('#place_order').attr('style').includes('display:none') && !$(SH_PR_SELECTOR).attr('style')) {
                     console.log("Force click triggered")
 
                     $('form.checkout input.input-radio')[0]?.click(); //force click
@@ -24,7 +24,7 @@
                 //     document.querySelector('#place_order'),
                 //     {attributes: true}
                 // );
-                console.log("RKFL - clear btn check");
+                console.log("SH_PR - clear btn check");
 
                 clearInterval(intButn)
             }
@@ -34,16 +34,16 @@
 
         $('form.checkout').on('click', 'input[name="payment_method"]', function () {
 
-            var toggleRKFL, toggleSubmit;
+            var toggleSH_PR, toggleSubmit;
 
-            var isRKFLB = $(this).is('#payment_method_rocketfuel_gateway');
-            if (isRKFLB) {
-                toggleRKFL = 'show'
+            var isSH_PRB = $(this).is('#payment_method_shark_processing_gateway');
+            if (isSH_PRB) {
+                toggleSH_PR = 'show'
                 toggleSubmit = 'hide'
           
                 document.querySelector("#place_order").style.setProperty('visibility', 'hidden', true ? 'important' : '');
             } else {
-                toggleRKFL = 'hide'
+                toggleSH_PR = 'hide'
                 toggleSubmit = 'show'
                 document.querySelector("#place_order").style.removeProperty('visibility');
 
@@ -51,7 +51,7 @@
             }
 
 
-            // if (isRKFLB) {
+            // if (isSH_PRB) {
 
             //     if (!cacheDefaultPlaceOrder) {
             //         cacheDefaultPlaceOrder = $('#place_order')
@@ -60,29 +60,29 @@
 
             //     sp.append(cacheDefaultPlaceOrder.html());
 
-            //     // sp.classList.add('rocketfuel_wrapper_button');
+            //     // sp.classList.add('shark_processing_wrapper_button');
 
             //     // $('#place_order').remove();//remove default
 
 
             //     .detach().appendTo
-            //     console.log('custom', { isRKFLB });
+            //     console.log('custom', { isSH_PRB });
 
             // } else {
-            //     if ($('.rocketfuel_wrapper_button')) {
-            //         $('.rocketfuel_wrapper_button').remove();//remove built
+            //     if ($('.shark_processing_wrapper_button')) {
+            //         $('.shark_processing_wrapper_button').remove();//remove built
             //     }
             //     if ($('#place_order').length === 0) {
-            //         $(RKFL_SELECTOR).parent().append(cacheDefaultPlaceOrder);
-            //         console.log('default', { isRKFLB });
+            //         $(SH_PR_SELECTOR).parent().append(cacheDefaultPlaceOrder);
+            //         console.log('default', { isSH_PRB });
             //     }
 
             // }
 
-            $(RKFL_SELECTOR).animate({
-                opacity: toggleRKFL,
-                height: toggleRKFL,
-                padding: toggleRKFL
+            $(SH_PR_SELECTOR).animate({
+                opacity: toggleSH_PR,
+                height: toggleSH_PR,
+                padding: toggleSH_PR
             }, 230);
             $('#place_order').animate({
                 opacity: toggleSubmit,

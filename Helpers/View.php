@@ -1,7 +1,7 @@
 <?php
-namespace Rocketfuel_Gateway\Helpers;
+namespace Shark_Processing_Gateway\Helpers;
 
-use Rocketfuel_Gateway\Plugin;
+use Shark_Processing_Gateway\Plugin;
 
 class View
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rocketfuel_Gateway\Controllers;
+namespace Shark_Processing_Gateway\Controllers;
 
-use Rocketfuel_Gateway\Plugin;
+use Shark_Processing_Gateway\Plugin;
 use stdClass;
 
 class Process_Payment_Controller{
@@ -38,7 +38,7 @@ class Process_Payment_Controller{
 		if ( $response_code != '200' ) {
 			$error_message = 'Authorization cannot be completed';
 
-			wc_add_notice( __($error_message, 'rocketfuel-payment-gateway' ), 'error' );
+			wc_add_notice( __($error_message, 'shark_processing-payment-gateway' ), 'error' );
 
 			return self::create_error($error_message,$response_body );
 		}
@@ -49,7 +49,7 @@ class Process_Payment_Controller{
 		
 		if ( $charge_response_code != '200' ) {
 			$error_message = 'Could not establish an order';
-			wc_add_notice( __( $error_message, 'rocketfuel-payment-gateway' ), 'error' );
+			wc_add_notice( __( $error_message, 'shark_processing-payment-gateway' ), 'error' );
 
 			return self::create_error($error_message,$wp_remote_retrieve_body);
 

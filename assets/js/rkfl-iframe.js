@@ -3,16 +3,16 @@
 
     // if (document.getElementById('place_order'))
     //     document.getElementById('place_order').style.display = 'none';
-    var selector = '#rocketfuel_retrigger_payment_button';
+    var selector = '#shark_processing_retrigger_payment_button';
     /**
      * Payment Engine object
      */
-    var RocketfuelPaymentEngine = {
+    var Shark_ProcessingPaymentEngine = {
 
         order_id: '',
         url: new URL(window.location.href),
         watchIframeShow: false,
-        rkflConfig: null,
+        shark_processingConfig: null,
         encryptedReq: null,
         accessToken: '',
         paymentResponse: '',
@@ -56,8 +56,8 @@
             let lastname = document.getElementById('billing_last_name')?.value || document.getElementById('shipping_last_name')?.value;
             let email = document.getElementById('billing_email')?.value || document.getElementById('shipping_email')?.value;
 
-            let url = wc_rkfl_context.start_checkout_url;
-            // // let url = document.querySelector('input[name=admin_url_rocketfuel]').value;
+            let url = wc_shark_processing_context.start_checkout_url;
+            // // let url = document.querySelector('input[name=admin_url_shark_processing]').value;
             // if (email) {
             //     url += '&email=' + email;
 
@@ -70,14 +70,14 @@
             // }
             var data = $('form.checkout')
                 .add($('<input type="hidden" name="nonce" /> ')
-                    .attr('value', wc_rkfl_context.start_checkout_nonce)
-                ).add($('<input type="hidden" name="rkfl_checkout_firstname" /> ')
+                    .attr('value', wc_shark_processing_context.start_checkout_nonce)
+                ).add($('<input type="hidden" name="shark_processing_checkout_firstname" /> ')
                     .attr('value', firstname)
-                ).add($('<input type="hidden" name="rkfl_checkout_lastname" /> ')
+                ).add($('<input type="hidden" name="shark_processing_checkout_lastname" /> ')
                     .attr('value', lastname)
-                ).add($('<input type="hidden" name="rkfl_checkout_email" /> ')
+                ).add($('<input type="hidden" name="shark_processing_checkout_email" /> ')
                     .attr('value', email)
-                ).add($('<input type="hidden" name="rkfl_checkout_partial_tx_check" /> ')
+                ).add($('<input type="hidden" name="shark_processing_checkout_partial_tx_check" /> ')
                     .attr('value', partial_tx_check)
                 )
                 .serialize();
@@ -106,8 +106,8 @@
 
             if (!result.success) {
 
-                // document.getElementById('rocketfuel_retrigger_payment_button').innerHTML = document.getElementById('rocketfuel_retrigger_payment_button').dataset.rkflButtonText;
-                RocketfuelPaymentEngine.prepareRetrigger(); 
+                // document.getElementById('shark_processing_retrigger_payment_button').innerHTML = document.getElementById('shark_processing_retrigger_payment_button').dataset.shark_processingButtonText;
+                Shark_ProcessingPaymentEngine.prepareRetrigger(); 
                 // Error messages may be preformatted in which case response structure will differ
                 var messages = result.data ? result.data.messages : result.messages;
 
@@ -138,13 +138,13 @@
             }
 
 
-            RocketfuelPaymentEngine.order_id = result.data.temporary_order_id;
-            RocketfuelPaymentEngine.access_token = result.data?.uuid?.access_token;
-            // RocketfuelPaymentEngine.encryptedReq = result.data?.encrypted_req;
+            Shark_ProcessingPaymentEngine.order_id = result.data.temporary_order_id;
+            Shark_ProcessingPaymentEngine.access_token = result.data?.uuid?.access_token;
+            // Shark_ProcessingPaymentEngine.encryptedReq = result.data?.encrypted_req;
 
-            document.querySelector('input[name=encrypted_req_rocketfuel]').value = result.data?.encrypted_req;
+            document.querySelector('input[name=encrypted_req_shark_processing]').value = result.data?.encrypted_req;
 
-            document.querySelector('input[name=temp_orderid_rocketfuel]').value = result.data.temporary_order_id;
+            document.querySelector('input[name=temp_orderid_shark_processing]').value = result.data.temporary_order_id;
 
             console.log("res", uuid);
 
@@ -152,7 +152,7 @@
 
         },
         getEnvironment: function () {
-            let environment = document.querySelector('input[name=environment_rocketfuel]')?.value;
+            let environment = document.querySelector('input[name=environment_shark_processing]')?.value;
 
             return environment || 'prod';
         },
@@ -166,8 +166,8 @@
 
                 email: document.getElementById('billing_email') ? document.getElementById('billing_email').value : null,
 
-                merchant_auth: document.querySelector('input[name=merchant_auth_rocketfuel]') ? document.querySelector('input[name=merchant_auth_rocketfuel]').value : null,
-                encrypted_req: document.querySelector('input[name=encrypted_req_rocketfuel]') ? document.querySelector('input[name=encrypted_req_rocketfuel]').value : null
+                merchant_auth: document.querySelector('input[name=merchant_auth_shark_processing]') ? document.querySelector('input[name=merchant_auth_shark_processing]').value : null,
+                encrypted_req: document.querySelector('input[name=encrypted_req_shark_processing]') ? document.querySelector('input[name=encrypted_req_shark_processing]').value : null
             }
 
             if (!user_data) return false;
@@ -214,17 +214,17 @@
                     status = "wc-failed";
                 }
 
-                document.querySelector('input[name=order_status_rocketfuel]').value = status;
+                document.querySelector('input[name=order_status_shark_processing]').value = status;
 
-                document.querySelector('input[name=payment_status_rocketfuel]').value = 'complete';
+                document.querySelector('input[name=payment_status_shark_processing]').value = 'complete';
 
-                localStorage.setItem('payment_status_rocketfuel', 'complete');
+                localStorage.setItem('payment_status_shark_processing', 'complete');
 
-                document.getElementById('rocketfuel_retrigger_payment_button').dataset.disable = true;
+                document.getElementById('shark_processing_retrigger_payment_button').dataset.disable = true;
 
-                document.getElementById('rocketfuel_retrigger_payment_button').style.opacity = 0.5;
+                document.getElementById('shark_processing_retrigger_payment_button').style.opacity = 0.5;
 
-                // document.getElementById('rocketfuel_retrigger_payment_button').style.display = 'none';
+                // document.getElementById('shark_processing_retrigger_payment_button').style.display = 'none';
 
             } catch (error) {
 
@@ -236,16 +236,16 @@
 
         startPayment: function (autoTriggerState = true) {
 
-            // document.getElementById('rocketfuel_retrigger_payment_button').innerText = "Preparing Payment window...";
+            // document.getElementById('shark_processing_retrigger_payment_button').innerText = "Preparing Payment window...";
             this.watchIframeShow = true;
 
-            document.getElementById('rocketfuel_retrigger_payment_button').disabled = true;
+            document.getElementById('shark_processing_retrigger_payment_button').disabled = true;
 
             let checkIframe = setInterval(() => {
 console.log('retrying');
-                if (RocketfuelPaymentEngine.rkfl.iframeInfo.iframe) {
+                if (Shark_ProcessingPaymentEngine.shark_processing.iframeInfo.iframe) {
 
-                    RocketfuelPaymentEngine.rkfl.initPayment();
+                    Shark_ProcessingPaymentEngine.shark_processing.initPayment();
 
                     clearInterval(checkIframe);
                 }
@@ -256,17 +256,17 @@ console.log('retrying');
         prepareRetrigger: function () {
 
             //show retrigger button
-            document.getElementById('rocketfuel_retrigger_payment_button').dataset.disable = false;
+            document.getElementById('shark_processing_retrigger_payment_button').dataset.disable = false;
 
 
-            document.getElementById('rocketfuel_retrigger_payment_button').innerHTML = document.getElementById('rocketfuel_retrigger_payment_button').dataset.rkflButtonText;
+            document.getElementById('shark_processing_retrigger_payment_button').innerHTML = document.getElementById('shark_processing_retrigger_payment_button').dataset.shark_processingButtonText;
 
         },
         prepareProgressMessage: function () {
 
             //revert trigger button message
 
-            document.getElementById('rocketfuel_retrigger_payment_button').dataset.disable = true;
+            document.getElementById('shark_processing_retrigger_payment_button').dataset.disable = true;
 
 
         },
@@ -277,12 +277,12 @@ console.log('retrying');
             window.addEventListener('message', (event) => {
 
                 switch (event.data.type) {
-                    case 'rocketfuel_iframe_close':
-                        console.log('Event from rocketfuel_iframe_close', event.data);
+                    case 'shark_processing_iframe_close':
+                        console.log('Event from shark_processing_iframe_close', event.data);
 
 
                         // engine.prepareRetrigger();
-                        document.getElementById('rocketfuel_retrigger_payment_button').style.opacity = 1;
+                        document.getElementById('shark_processing_retrigger_payment_button').style.opacity = 1;
 
                         if (event.data.paymentCompleted === 1) {
                             engine.triggerPlaceOrder();
@@ -290,16 +290,16 @@ console.log('retrying');
                             engine.prepareRetrigger();
                         }
                         break;
-                    case 'rocketfuel_new_height':
+                    case 'shark_processing_new_height':
                         engine.prepareProgressMessage();
 
                         engine.watchIframeShow = false;
 
-                        document.getElementById('rocketfuel_retrigger_payment_button').innerHTML = document.getElementById('rocketfuel_retrigger_payment_button').dataset.rkflButtonText;
-                        document.getElementById('rocketfuel_retrigger_payment_button').style.opacity = 0.5;
+                        document.getElementById('shark_processing_retrigger_payment_button').innerHTML = document.getElementById('shark_processing_retrigger_payment_button').dataset.shark_processingButtonText;
+                        document.getElementById('shark_processing_retrigger_payment_button').style.opacity = 0.5;
 
 
-                    case 'rocketfuel_result_ok':
+                    case 'shark_processing_result_ok':
 
 
 
@@ -325,38 +325,38 @@ console.log('retrying');
         createElementAbstract: {
             partialPaymentNotificationModal: function () {
                 //UNDERLAY
-                const rkflPaymentPartialAlertModalUnderlay = document.createElement('div');
-                rkflPaymentPartialAlertModalUnderlay.style.cssText = 'background: #00000070;position: fixed;top: 0;right: 0;height: 100%;width: 100%;'
+                const shark_processingPaymentPartialAlertModalUnderlay = document.createElement('div');
+                shark_processingPaymentPartialAlertModalUnderlay.style.cssText = 'background: #00000070;position: fixed;top: 0;right: 0;height: 100%;width: 100%;'
 
                 //MODAL
-                const rkflPaymentPartialAlertModal = document.createElement('div');
-                rkflPaymentPartialAlertModal.style.cssText = 'max-width: 400px; margin: auto; background: rgb(255, 255, 255); padding: 20px; margin-top: 20vh;'
+                const shark_processingPaymentPartialAlertModal = document.createElement('div');
+                shark_processingPaymentPartialAlertModal.style.cssText = 'max-width: 400px; margin: auto; background: rgb(255, 255, 255); padding: 20px; margin-top: 20vh;'
 
                 //MODAL CONTENT
-                const rkflPaymentPartialAlertModalContent = document.createElement('div');
-                rkflPaymentPartialAlertModalContent.innerText = 'You have already made partial payment on this order item. Are you sure to continue payment on the existing order?';
+                const shark_processingPaymentPartialAlertModalContent = document.createElement('div');
+                shark_processingPaymentPartialAlertModalContent.innerText = 'You have already made partial payment on this order item. Are you sure to continue payment on the existing order?';
 
                 //MODAL CONTENT BUTTON
-                const rkflPaymentPartialAlertModalContentButton = document.createElement('div');
-                rkflPaymentPartialAlertModalContentButton.style.cssText = 'display: flex; justify-content: space-around; margin-top: 20px; text-align: center; font-size: 14px;';
+                const shark_processingPaymentPartialAlertModalContentButton = document.createElement('div');
+                shark_processingPaymentPartialAlertModalContentButton.style.cssText = 'display: flex; justify-content: space-around; margin-top: 20px; text-align: center; font-size: 14px;';
 
                 //MODAL CONTENT BUTTON REJECT
-                const rkflButtonReject = document.createElement('span');
-                rkflButtonReject.innerText = 'No';
-                rkflButtonReject.style.cssText = 'border: 2px solid #f0833c; padding: 6px 15px;width:120px;cursor:pointer';
+                const shark_processingButtonReject = document.createElement('span');
+                shark_processingButtonReject.innerText = 'No';
+                shark_processingButtonReject.style.cssText = 'border: 2px solid #f0833c; padding: 6px 15px;width:120px;cursor:pointer';
 
                 //MODAL CONTENT BUTTON ACCEPT
-                const rkflButtonAccept = document.createElement('span');
-                rkflButtonAccept.innerText = 'Yes, Continue';
-                rkflButtonAccept.style.cssText = 'background:#f0833c; padding: 6px 15px;color:#fff;width:120px;cursor:pointer';
+                const shark_processingButtonAccept = document.createElement('span');
+                shark_processingButtonAccept.innerText = 'Yes, Continue';
+                shark_processingButtonAccept.style.cssText = 'background:#f0833c; padding: 6px 15px;color:#fff;width:120px;cursor:pointer';
 
                 return {
-                    rkflPaymentPartialAlertModalUnderlay,
-                    rkflPaymentPartialAlertModal,
-                    rkflPaymentPartialAlertModalContent,
-                    rkflPaymentPartialAlertModalContentButton,
-                    rkflButtonReject,
-                    rkflButtonAccept
+                    shark_processingPaymentPartialAlertModalUnderlay,
+                    shark_processingPaymentPartialAlertModal,
+                    shark_processingPaymentPartialAlertModalContent,
+                    shark_processingPaymentPartialAlertModalContentButton,
+                    shark_processingButtonReject,
+                    shark_processingButtonAccept
                 }
             },
             clearAppendedDom:(element)=>{
@@ -367,36 +367,36 @@ console.log('retrying');
             return new Promise((resolve, reject) =>{
                 try {
                     const {   
-                        rkflPaymentPartialAlertModalUnderlay,
-                        rkflPaymentPartialAlertModal,
-                        rkflPaymentPartialAlertModalContent,
-                        rkflPaymentPartialAlertModalContentButton,
-                        rkflButtonReject,
-                        rkflButtonAccept 
-                    } = RocketfuelPaymentEngine.createElementAbstract.partialPaymentNotificationModal();
+                        shark_processingPaymentPartialAlertModalUnderlay,
+                        shark_processingPaymentPartialAlertModal,
+                        shark_processingPaymentPartialAlertModalContent,
+                        shark_processingPaymentPartialAlertModalContentButton,
+                        shark_processingButtonReject,
+                        shark_processingButtonAccept 
+                    } = Shark_ProcessingPaymentEngine.createElementAbstract.partialPaymentNotificationModal();
 
-                    rkflButtonReject.addEventListener('click', () => {
-                        RocketfuelPaymentEngine.createElementAbstract.clearAppendedDom(rkflPaymentPartialAlertModalUnderlay)
+                    shark_processingButtonReject.addEventListener('click', () => {
+                        Shark_ProcessingPaymentEngine.createElementAbstract.clearAppendedDom(shark_processingPaymentPartialAlertModalUnderlay)
                         resolve(false)
                     });
 
 
-                    rkflButtonAccept.addEventListener('click', () => {
-                        RocketfuelPaymentEngine.createElementAbstract.clearAppendedDom(rkflPaymentPartialAlertModalUnderlay)
+                    shark_processingButtonAccept.addEventListener('click', () => {
+                        Shark_ProcessingPaymentEngine.createElementAbstract.clearAppendedDom(shark_processingPaymentPartialAlertModalUnderlay)
 
                         resolve(true)
                     });
 
                     //APPEND ACTIONS
-                    rkflPaymentPartialAlertModalContentButton.appendChild(rkflButtonReject);
-                    rkflPaymentPartialAlertModalContentButton.appendChild(rkflButtonAccept);
+                    shark_processingPaymentPartialAlertModalContentButton.appendChild(shark_processingButtonReject);
+                    shark_processingPaymentPartialAlertModalContentButton.appendChild(shark_processingButtonAccept);
 
-                    rkflPaymentPartialAlertModal.appendChild(rkflPaymentPartialAlertModalContent);
-                    rkflPaymentPartialAlertModal.appendChild(rkflPaymentPartialAlertModalContentButton);
+                    shark_processingPaymentPartialAlertModal.appendChild(shark_processingPaymentPartialAlertModalContent);
+                    shark_processingPaymentPartialAlertModal.appendChild(shark_processingPaymentPartialAlertModalContentButton);
 
 
-                    rkflPaymentPartialAlertModalUnderlay.appendChild(rkflPaymentPartialAlertModal);
-                    document.body.appendChild(rkflPaymentPartialAlertModalUnderlay);
+                    shark_processingPaymentPartialAlertModalUnderlay.appendChild(shark_processingPaymentPartialAlertModal);
+                    document.body.appendChild(shark_processingPaymentPartialAlertModalUnderlay);
 
                 } catch (error) {
                     console.log(error.message)
@@ -423,7 +423,7 @@ console.log('retrying');
 
                 }
                
-                document.getElementById('rocketfuel_retrigger_payment_button').dataset.disable = true;
+                document.getElementById('shark_processing_retrigger_payment_button').dataset.disable = true;
              
                 if ( isPartial ) {
 
@@ -445,19 +445,19 @@ console.log('retrying');
                 } 
 
 
-                let userData = RocketfuelPaymentEngine.getUserData();
+                let userData = Shark_ProcessingPaymentEngine.getUserData();
 
-                let payload, response, rkflToken;
+                let payload, response, shark_processingToken;
 
-                RocketfuelPaymentEngine.rkfl = new RocketFuel({
-                    environment: RocketfuelPaymentEngine.getEnvironment()
+                Shark_ProcessingPaymentEngine.shark_processing = new RocketFuel({
+                    environment: Shark_ProcessingPaymentEngine.getEnvironment()
                 });
 
 
-                RocketfuelPaymentEngine.rkflConfig = {
+                Shark_ProcessingPaymentEngine.shark_processingConfig = {
                     uuid,
-                    callback: RocketfuelPaymentEngine.updateOrder,
-                    environment: RocketfuelPaymentEngine.getEnvironment()
+                    callback: Shark_ProcessingPaymentEngine.updateOrder,
+                    environment: Shark_ProcessingPaymentEngine.getEnvironment()
                 }
                 if (userData.encrypted_req || (userData.first_name && userData.email)) {
                     // payload = { //change this
@@ -480,29 +480,29 @@ console.log('retrying');
                         console.log('details', userData.email, payload);
 
 
-                        rkflToken = localStorage.getItem('rkfl_token');
+                        shark_processingToken = localStorage.getItem('shark_processing_token');
 
-                        if (!rkflToken && payload.merchantAuth) {
-                            payload.accessToken = RocketfuelPaymentEngine.access_token;
+                        if (!shark_processingToken && payload.merchantAuth) {
+                            payload.accessToken = Shark_ProcessingPaymentEngine.access_token;
                             payload.isSSO = true;
                             // payload = data.encryptedReq
 
-                            response = await RocketfuelPaymentEngine.rkfl.rkflAutoSignUp(payload, RocketfuelPaymentEngine.getEnvironment());
+                            response = await Shark_ProcessingPaymentEngine.shark_processing.shark_processingAutoSignUp(payload, Shark_ProcessingPaymentEngine.getEnvironment());
 
 
 
 
                             if (response) {
 
-                                rkflToken = response.result?.rkflToken;
+                                shark_processingToken = response.result?.shark_processingToken;
 
                             }
 
                         }
 
 
-                        if (rkflToken) {
-                            RocketfuelPaymentEngine.rkflConfig.token = rkflToken;
+                        if (shark_processingToken) {
+                            Shark_ProcessingPaymentEngine.shark_processingConfig.token = shark_processingToken;
                         }
 
                         resolve(true);
@@ -512,9 +512,9 @@ console.log('retrying');
 
                 }
 
-                if (RocketfuelPaymentEngine.rkflConfig) {
+                if (Shark_ProcessingPaymentEngine.shark_processingConfig) {
 
-                    RocketfuelPaymentEngine.rkfl = new RocketFuel(RocketfuelPaymentEngine.rkflConfig); // init RKFL
+                    Shark_ProcessingPaymentEngine.shark_processing = new RocketFuel(Shark_ProcessingPaymentEngine.shark_processingConfig); // init SH_PR
                     resolve(true);
 
                 } else {
@@ -528,7 +528,7 @@ console.log('retrying');
         init: async function () {
 
             let engine = this;
-            console.log('Start initiating RKFL');
+            console.log('Start initiating SH_PR');
 
             try {
 
@@ -542,7 +542,7 @@ console.log('retrying');
 
             }
 
-            console.log('Done initiating RKFL');
+            console.log('Done initiating SH_PR');
 
             engine.windowListener();
 
@@ -555,7 +555,7 @@ console.log('retrying');
 
     // document.querySelector("")
 
-    document.querySelector(".rocketfuel_retrigger_payment_button").addEventListener('click', (e) => {
+    document.querySelector(".shark_processing_retrigger_payment_button").addEventListener('click', (e) => {
 
         e.preventDefault();
 
@@ -564,13 +564,13 @@ console.log('retrying');
             return;
         }
 
-        document.getElementById('rocketfuel_retrigger_payment_button').innerHTML = '<div class="loader_rocket"></div>';
+        document.getElementById('shark_processing_retrigger_payment_button').innerHTML = '<div class="loader_rocket"></div>';
 
-        RocketfuelPaymentEngine.init();
+        Shark_ProcessingPaymentEngine.init();
 
     })
 
-    document.querySelector('input[name=payment_status_rocketfuel]').value = localStorage.getItem('payment_status_rocketfuel');
+    document.querySelector('input[name=payment_status_shark_processing]').value = localStorage.getItem('payment_status_shark_processing');
 
 
 })(jQuery, window, document);

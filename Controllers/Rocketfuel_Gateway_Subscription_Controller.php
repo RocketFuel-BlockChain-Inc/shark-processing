@@ -1,16 +1,16 @@
 <?php
 
-namespace Rocketfuel_Gateway\Controllers;
+namespace Shark_Processing_Gateway\Controllers;
 
-use Rocketfuel_Gateway\Services\Subscription_Service;
+use Shark_Processing_Gateway\Services\Subscription_Service;
 
 if (!defined('ABSPATH')) {
 	exit;
 }
 /**
- * Class Rocketfuel_Gateway_Subscription_Controller 
+ * Class Shark_Processing_Gateway_Subscription_Controller 
  */
-class Rocketfuel_Gateway_Subscription_Controller extends Rocketfuel_Gateway_Controller
+class Shark_Processing_Gateway_Subscription_Controller extends Shark_Processing_Gateway_Controller
 {
 
 	/**
@@ -75,7 +75,7 @@ class Rocketfuel_Gateway_Subscription_Controller extends Rocketfuel_Gateway_Cont
 
 		if (is_wp_error($response)) {
 
-			$renewal_order->update_status('failed', sprintf(__('Rocketfuel Transaction Failed (%s)', 'rocketfuel-payment-gateway'), $response->get_error_message()));
+			$renewal_order->update_status('failed', sprintf(__('Shark_Processing Transaction Failed (%s)', 'shark_processing-payment-gateway'), $response->get_error_message()));
 		}
 	}
 	/**
@@ -92,13 +92,13 @@ class Rocketfuel_Gateway_Subscription_Controller extends Rocketfuel_Gateway_Cont
 
 		// Check for trial subscription order with 0 total.
 		if ($this->order_has_subscription($order) && $order->get_total() == 0) {
-			$temporary_order_id = get_post_meta($order_id, 'rocketfuel_temp_orderid', true);
+			$temporary_order_id = get_post_meta($order_id, 'shark_processing_temp_orderid', true);
 
 			$this->swap_order_id($temporary_order_id, $order_id);
 
 			$order->payment_complete();
 
-			$order->add_order_note(__('This subscription has a free trial, hence the 0 amount', 'rocketfuel-payment-gateway'));
+			$order->add_order_note(__('This subscription has a free trial, hence the 0 amount', 'shark_processing-payment-gateway'));
 
 			return array(
 				'result'   => 'success',
@@ -133,7 +133,7 @@ class Rocketfuel_Gateway_Subscription_Controller extends Rocketfuel_Gateway_Cont
 		try {
 			$subscriptionData = array();
 
-			$temporary_order_id = get_post_meta($order_id, 'rocketfuel_temp_orderid', true);
+			$temporary_order_id = get_post_meta($order_id, 'shark_processing_temp_orderid', true);
 
 			foreach ($subscriptions as $subscription) {
 
@@ -197,7 +197,7 @@ class Rocketfuel_Gateway_Subscription_Controller extends Rocketfuel_Gateway_Cont
 
 
 
-		return new WP_Error('rkfl_error', __('This subscription can&#39;t be renewed automatically. The customer will have to login to their account to renew their subscription', 'rocketfuel'));
+		return new WP_Error('shark_processing_error', __('This subscription can&#39;t be renewed automatically. The customer will have to login to their account to renew their subscription', 'shark_processing'));
 	}
 	/**
 	 * Process a subscription renewal payment.
@@ -217,7 +217,7 @@ class Rocketfuel_Gateway_Subscription_Controller extends Rocketfuel_Gateway_Cont
 		try {
 			$subscriptionData = array();
 
-			$temporary_order_id = get_post_meta($order_id, 'rocketfuel_temp_orderid', true);
+			$temporary_order_id = get_post_meta($order_id, 'shark_processing_temp_orderid', true);
 
 
 			$sub_items = $subscription->get_items();
@@ -262,7 +262,7 @@ class Rocketfuel_Gateway_Subscription_Controller extends Rocketfuel_Gateway_Cont
 
 		 
 if($response->statusCode === '400'){
-	return new WP_Error( 'rocketfuel_error', $response );
+	return new WP_Error( 'shark_processing_error', $response );
 
 }else{
 	$order->payment_complete();
@@ -276,6 +276,6 @@ if($response->statusCode === '400'){
 
 
 
-		return new WP_Error('rkfl_error', __('This subscription can&#39;t be renewed automatically. The customer will have to login to their account to renew their subscription', 'rocketfuel'));
+		return new WP_Error('shark_processing_error', __('This subscription can&#39;t be renewed automatically. The customer will have to login to their account to renew their subscription', 'shark_processing'));
 	}
 }

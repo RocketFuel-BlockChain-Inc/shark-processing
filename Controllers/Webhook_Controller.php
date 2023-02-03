@@ -1,7 +1,7 @@
 <?php
-namespace Rocketfuel_Gateway\Controllers;
+namespace Shark_Processing_Gateway\Controllers;
 
-use Rocketfuel_Gateway\Helpers\Common;
+use Shark_Processing_Gateway\Helpers\Common;
 
 /**
  * Webhook Controller
@@ -76,7 +76,7 @@ class Webhook_Controller {
 			return true;
 		}
 		if ( -1 === $status ) {
-			$order->update_status( 'wc-failed', 'Rocketfuel could not verify the payment' );
+			$order->update_status( 'wc-failed', 'Shark_Processing could not verify the payment' );
 			return true;
 		}
 		if ( 101 === $status ) {
@@ -87,7 +87,7 @@ class Webhook_Controller {
 
 			if ( isset( $data['isSubscription'] ) && $data['isSubscription'] === true ) {
 
-				$message = sprintf( __( 'Payment via Rocketfuel is successful (Transaction Reference: %s)', 'rocketfuel-payment-gateway' ), isset( $data['transactionId'] ) ? $data['transactionId'] : '' );
+				$message = sprintf( __( 'Payment via Shark_Processing is successful (Transaction Reference: %s)', 'shark_processing-payment-gateway' ), isset( $data['transactionId'] ) ? $data['transactionId'] : '' );
 
 				$order->add_order_note( $message );
 
@@ -134,7 +134,7 @@ class Webhook_Controller {
 	 * Get gateway instance
 	 */
 	private static function get_gateway() {
-		return new Rocketfuel_Gateway_Controller();
+		return new Shark_Processing_Gateway_Controller();
 	}
 	public static function get_helper(){
 		

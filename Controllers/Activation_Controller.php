@@ -1,8 +1,8 @@
 <?php
 
-namespace Rocketfuel_Gateway\Controllers;
+namespace Shark_Gateway\Controllers;
 
-use Rocketfuel_Gateway\Plugin;
+use Shark_Processing_Gateway\Plugin;
 
 class Activation_Controller
 {

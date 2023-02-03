@@ -1,8 +1,8 @@
 <?php
 
-namespace Rocketfuel_Gateway\Controllers;
+namespace Shark_Processing_Gateway\Controllers;
 
-use Rocketfuel_Gateway\Plugin;
+use Shark_Processing_Gateway\Plugin;
 
 class Cart_Handler_Controller{
 
@@ -13,9 +13,9 @@ class Cart_Handler_Controller{
 
 
         add_action(
-            'wc_ajax_wc_rkfl_start_checkout',
+            'wc_ajax_wc_shark_processing_start_checkout',
             array( __CLASS__,
-            'rocketfuel_process_checkout' )
+            'shark_processing_process_checkout' )
         );
     }
     public static function sort_shipping_address(){
@@ -158,25 +158,25 @@ class Cart_Handler_Controller{
 
         $temporary_order_id = md5( microtime() );
 
-        $email = isset ($_POST['rkfl_checkout_email'] ) ? sanitize_email( wp_unslash( $_POST['rkfl_checkout_email'] ) ) : '';
+        $email = isset ($_POST['shark_processing_checkout_email'] ) ? sanitize_email( wp_unslash( $_POST['shark_processing_checkout_email'] ) ) : '';
 
-        $partial_payment_cache_key = 'rkfl_partial_payment_cache_'.$email;
+        $partial_payment_cache_key = 'shark_processing_partial_payment_cache_'.$email;
 
-        $_rkfl_partial_payment_cache = get_option($partial_payment_cache_key);
+        $_shark_processing_partial_payment_cache = get_option($partial_payment_cache_key);
         
         file_put_contents(__DIR__.'/partial_log.json',"
-                   \n      rkfl_partial_payment_cache".
-                  json_encode( $_rkfl_partial_payment_cache ),FILE_APPEND);
-        $gateway = new Rocketfuel_Gateway_Controller();
+                   \n      shark_processing_partial_payment_cache".
+                  json_encode( $_shark_processing_partial_payment_cache ),FILE_APPEND);
+        $gateway = new Shark_Processing_Gateway_Controller();
 
         $merchant_cred = array(
             'email' => $gateway->email,
             'password' => $gateway->password
         );
 
-        $firstname =isset($_POST['rkfl_checkout_firstname']) ? sanitize_text_field( wp_unslash($_POST['rkfl_checkout_firstname']) ) : '';
+        $firstname =isset($_POST['shark_processing_checkout_firstname']) ? sanitize_text_field( wp_unslash($_POST['shark_processing_checkout_firstname']) ) : '';
 
-        $lastname = isset($_POST['rkfl_checkout_lastname']) ? sanitize_text_field( wp_unslash( $_POST['rkfl_checkout_lastname']) ) : '';
+        $lastname = isset($_POST['shark_processing_checkout_lastname']) ? sanitize_text_field( wp_unslash( $_POST['shark_processing_checkout_lastname']) ) : '';
 
         $shipping_address = self::sort_shipping_address();
         
@@ -192,14 +192,14 @@ class Cart_Handler_Controller{
 
 
        if( 
-        ($_POST['rkfl_checkout_partial_tx_check'] == 'true') && 
-        $_rkfl_partial_payment_cache && 
-        isset( $_rkfl_partial_payment_cache['temporary_order_id'] ) ){
+        ($_POST['shark_processing_checkout_partial_tx_check'] == 'true') && 
+        $_shark_processing_partial_payment_cache && 
+        isset( $_shark_processing_partial_payment_cache['temporary_order_id'] ) ){
                 
                 $query = self::get_posts( array(
                     'post_type' => 'shop_order',
                     'post_status' => 'any',
-                    'meta_value' => $_rkfl_partial_payment_cache['temporary_order_id'],
+                    'meta_value' => $_shark_processing_partial_payment_cache['temporary_order_id'],
                 ));
                 file_put_contents(__DIR__.'/partial_log.json',"
                 \n      Howm= many was gotten".
@@ -208,7 +208,7 @@ class Cart_Handler_Controller{
                 if( count( $query->posts ) > 0 ){ 
                     // if order exists
 
-                    delete_option('rkfl_partial_payment_cache_'.$email);
+                    delete_option('shark_processing_partial_payment_cache_'.$email);
 
                 }else{
 
@@ -235,7 +235,7 @@ class Cart_Handler_Controller{
                     if ( $response_code != '200' ) {
                         $error_message = 'Authorization cannot be completed';
             
-                        wc_add_notice( __($error_message, 'rocketfuel-payment-gateway' ), 'error' );
+                        wc_add_notice( __($error_message, 'shark_processing-payment-gateway' ), 'error' );
 
                                 return wp_send_json_error( array(
                                     'error' => true,
@@ -244,14 +244,14 @@ class Cart_Handler_Controller{
                             );
                      
                     }
-            $rkfl_access_token = $result->result->access;
+            $shark_processing_access_token = $result->result->access;
                     
                     $args = array(
                         'timeout' => 200,
-                        'headers' => array( 'Content-Type' => 'application/json','authorization'=>'Bearer '.$rkfl_access_token )
+                        'headers' => array( 'Content-Type' => 'application/json','authorization'=>'Bearer '.$shark_processing_access_token )
                     );
          
-                    $url = $gateway->get_configured_endpoint()."/purchase/transaction/partials/".$gateway->get_merchant_id()."?offerId=".$_rkfl_partial_payment_cache['temporary_order_id']."&hostedPageId=".$_rkfl_partial_payment_cache['uuid'];
+                    $url = $gateway->get_configured_endpoint()."/purchase/transaction/partials/".$gateway->get_merchant_id()."?offerId=".$_shark_processing_partial_payment_cache['temporary_order_id']."&hostedPageId=".$_shark_processing_partial_payment_cache['uuid'];
                     file_put_contents(__DIR__.'/partial_log.json',"
                     \n      What url for partial" .
                     $url  ,FILE_APPEND);
@@ -264,7 +264,7 @@ class Cart_Handler_Controller{
                         
                         // $error_message = 'Could not retrieve Partial Payment';
             
-                        // wc_add_notice( __( $error_message, 'rocketfuel-payment-gateway' ), 'error' );
+                        // wc_add_notice( __( $error_message, 'shark_processing-payment-gateway' ), 'error' );
 
                         $response_string = wp_remote_retrieve_body( $result );
 					  
@@ -279,7 +279,7 @@ class Cart_Handler_Controller{
                                 'encrypted_req' => $encrypted_req,
                                 'temporary_order_id' => $temporary_order_id,
                                 'uuid' => array(
-                                    'access_token' => $rkfl_access_token,
+                                    'access_token' => $shark_processing_access_token,
                                     'result' => array(
                                         'uuid' => $response_body->result->tx->hostedPageId
                                     )
@@ -352,13 +352,13 @@ class Cart_Handler_Controller{
             
             }
 // 			{"temporary_order_id":"84f7809bde45a1b6de15ae93a6e4bf4a","uuid":"2219ab84-f8b4-45d6-abb9-1c9da38a461e"}
-            update_option( 'rkfl_partial_payment_cache_'.$email, 
+            update_option( 'shark_processing_partial_payment_cache_'.$email, 
                 array(
                     'temporary_order_id' => $temporary_order_id,
                     'uuid'=>$payment_response->result->uuid
                 ),
             false );
-// 			    update_option( 'rkfl_partial_payment_cache_'.$email, 
+// 			    update_option( 'shark_processing_partial_payment_cache_'.$email, 
 //                 array(
 //                     'temporary_order_id' => '84f7809bde45a1b6de15ae93a6e4bf4a',
 //                     'uuid'=>'2219ab84-f8b4-45d6-abb9-1c9da38a461e'
@@ -382,9 +382,9 @@ class Cart_Handler_Controller{
         }
  
     }
-    public static function rocketfuel_process_checkout() {
+    public static function shark_processing_process_checkout() {
 
-        if ( empty( $_POST['nonce'] ) || !wp_verify_nonce( $_POST['nonce'], '_wc_rkfl_start_checkout_nonce' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+        if ( empty( $_POST['nonce'] ) || !wp_verify_nonce( $_POST['nonce'], '_wc_shark_processing_start_checkout_nonce' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
             wp_die( __( 'Cheatin&#8217; huh?', 'woocommerce-gateway-paypal-express-checkout' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rocketfuel_Gateway\Services;
+namespace Shark_Processing_Gateway\Services;
 
-use Rocketfuel_Gateway\Plugin;
+use Shark_Processing_Gateway\Plugin;
 
 class Subscription_Service {
 

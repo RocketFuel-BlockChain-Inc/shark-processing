@@ -1,8 +1,8 @@
 <?php
-namespace Rocketfuel_Gateway\Controllers;
+namespace Shark_Processing_Gateway\Controllers;
 
-use Rocketfuel_Gateway\Plugin;
-use Rocketfuel_Gateway\Controllers\Process_Payment_Controller;
+use Shark_Processing_Gateway\Plugin;
+use Shark_Processing_Gateway\Controllers\Process_Payment_Controller;
 
 class Rest_Controller{
     /**
@@ -20,14 +20,14 @@ class Rest_Controller{
      */
     public static function define_rest_route(){
 
-        // address for rocketfuel callback
-        $gateway = new Rocketfuel_Gateway_Controller();
+        // address for shark_processing callback
+        $gateway = new Shark_Processing_Gateway_Controller();
         register_rest_route(
             Plugin::get_api_route_namespace(),
             'payment',
             array(
                 'methods' => \WP_REST_Server::CREATABLE,
-                'callback' => array('Rocketfuel_Gateway\Controllers\Webhook_Controller', 'payment'),
+                'callback' => array('Shark_Processing_Gateway\Controllers\Webhook_Controller', 'payment'),
                 'permission_callback' => '__return_true'
             )
         );
@@ -37,7 +37,7 @@ class Rest_Controller{
             'payment',
             array(
                 'methods' => \WP_REST_Server::READABLE,
-                'callback' => array('Rocketfuel_Gateway\Controllers\Webhook_Controller', 'check_callback'),
+                'callback' => array('Shark_Processing_Gateway\Controllers\Webhook_Controller', 'check_callback'),
                 'permission_callback' => '__return_true'
             )
         );
@@ -47,7 +47,7 @@ class Rest_Controller{
             'check',
             array(
                 'methods' => \WP_REST_Server::READABLE,
-                'callback' => array('Rocketfuel_Gateway\Controllers\Webhook_Controller', 'check_callback'),
+                'callback' => array('Shark_Processing_Gateway\Controllers\Webhook_Controller', 'check_callback'),
                 'permission_callback' => '__return_true'
             )
         );
@@ -58,7 +58,7 @@ class Rest_Controller{
             array(
                 'methods' => \WP_REST_Server::CREATABLE,
                 'callback' => array(
-                    'Rocketfuel_Gateway\Controllers\Process_Payment_Controller',
+                    'Shark_Processing_Gateway\Controllers\Process_Payment_Controller',
                     'auth' )
                     ,'permission_callback' => '__return_true'
             )

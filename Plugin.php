@@ -1,15 +1,15 @@
 <?php
 
-namespace Rocketfuel_Gateway;
+namespace Shark_Processing_Gateway;
 
-use Rocketfuel_Gateway\Controllers\Activation_Controller;
-use Rocketfuel_Gateway\Controllers\Rest_Controller;
-use Rocketfuel_Gateway\Controllers\Metabox_Controller;
-use Rocketfuel_Gateway\Controllers\Woocommerce_Controller;
+use Shark_Processing_Gateway\Controllers\Activation_Controller;
+use Shark_Processing_Gateway\Controllers\Rest_Controller;
+use Shark_Processing_Gateway\Controllers\Metabox_Controller;
+use Shark_Processing_Gateway\Controllers\Woocommerce_Controller;
 
 class Plugin
 {
-    public static $prefix = 'rocketfuel_gateway_';
+    public static $prefix = 'shark_processing_gateway_';
 
     /**
      * Get the plugin's absolute path
@@ -51,7 +51,7 @@ class Plugin
     }
     public static function get_api_route_namespace()
     {
-        return 'rocketfuel/v1';
+        return 'shark_processing/v1';
     }
     public static function init($file)
     {

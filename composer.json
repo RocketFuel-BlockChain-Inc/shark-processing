@@ -1,6 +1,6 @@
 {
-    "name": "user/rocketfuel",
-    "description": "Pay with Rocketfuel",
+    "name": "user/shark",
+    "description": "Pay with Shark Processing",
     "authors": [
         {
             "name": "Udor Blessing",
@@ -9,7 +9,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Rocketfuel_Gateway\\": "./"
+            "Shark_Processing_Gateway\\": "./"
         }
     },
     "require": {}

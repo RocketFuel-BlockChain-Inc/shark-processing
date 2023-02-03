@@ -31,8 +31,8 @@ Accept Crypto payment anywhere
 
 == Frequently Asked Questions ==
 
-= Where can I find Rocketfuel documentation and user guides? =
-For help setting up and configuring Rocketfuel, please refer to [Getting Started](https://docs.rocketfuelblockchain.com).
+= Where can I find Shark_Processing documentation and user guides? =
+For help setting up and configuring Shark_Processing, please refer to [Getting Started](https://docs.shark_processingblockchain.com).
 
 == Changelog ==
 2.0.1 Added overlay on checkout page.
@@ -49,10 +49,10 @@ For help setting up and configuring Rocketfuel, please refer to [Getting Started
 2.1.6 Added Test Environments
 2.1.6.1 Fixed double first name issue
 2.1.6.2 Remove filler for lastname
-2.1.6.3 Sync rkfl sdk
+2.1.6.3 Sync shark_processing sdk
 2.1.6.4 Added Multiple Currency support
 2.1.6.5 Add Shipping to line item
-2.1.6.6 Sync rkfl and add sandbox
+2.1.6.6 Sync shark_processing and add sandbox
 3.0.0 Move Iframe to Checkout page
       Support for Woocommerce Subscription Plugin - Payment Method Autorenewal.
       Support for payment autorenewal for subscription orders.

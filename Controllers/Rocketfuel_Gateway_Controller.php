@@ -1,20 +1,20 @@
 <?php
 
-namespace Rocketfuel_Gateway\Controllers;
+namespace Shark_Processing_Gateway\Controllers;
 
-use Rocketfuel_Gateway\Plugin;
+use Shark_Processing_Gateway\Plugin;
 
-class Rocketfuel_Gateway_Controller extends \WC_Payment_Gateway
+class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 {
 	public function __construct()
 	{
-		$this->id = 'rocketfuel_gateway';
+		$this->id = 'shark_processing_gateway';
 
 		$this->has_fields = false;
 
-		$this->method_title = 'Rocketfuel';
+		$this->method_title = 'Shark_Processing';
 
-		$this->method_description = 'Pay with Crypto using Rocketfuel';
+		$this->method_description = 'Pay with Crypto using Shark_Processing';
 
 		$this->init_form_fields();
 
@@ -60,7 +60,7 @@ class Rocketfuel_Gateway_Controller extends \WC_Payment_Gateway
 		
 		add_action('admin_notices', array($this, 'admin_notices'));
 	 
-		add_action('woocommerce_review_order_before_submit', array($this, 'rocketfuel_place_order'));
+		add_action('woocommerce_review_order_before_submit', array($this, 'shark_processing_place_order'));
 	}
 	public function get_configured_endpoint(){
 		return $this->endpoint;
@@ -69,14 +69,14 @@ class Rocketfuel_Gateway_Controller extends \WC_Payment_Gateway
 	{
 
 		$environment_data = array(
-			'prod'    => 'https://app.rocketfuelblockchain.com/api',
+			'prod'    => 'https://app.shark_processingblockchain.com/api',
 			'dev'     => 'https://dev-app.rocketdemo.net/api',
 			'stage2'  => 'https://qa-app.rocketdemo.net/api',
 			'preprod' => 'https://preprod-app.rocketdemo.net/api',	
-			'sandbox' => 'https://app-sandbox.rocketfuelblockchain.com/api',
+			'sandbox' => 'https://app-sandbox.shark_processingblockchain.com/api',
 		);
 
-		return isset($environment_data[$environment]) ? $environment_data[$environment] : 'https://app.rocketfuelblockchain.com/api';
+		return isset($environment_data[$environment]) ? $environment_data[$environment] : 'https://app.shark_processingblockchain.com/api';
 	}
 	/**
 	 * Admin form field
@@ -85,23 +85,23 @@ class Rocketfuel_Gateway_Controller extends \WC_Payment_Gateway
 	{
 		$all_wc_order_status = wc_get_order_statuses();
 
-		$this->form_fields = apply_filters('rocketfuel_admin_fields', array(
+		$this->form_fields = apply_filters('shark_processing_admin_fields', array(
 			'enabled' => array(
-				'title' => __('Enable/Disable', 'rocketfuel-payment-gateway'),
+				'title' => __('Enable/Disable', 'shark_processing-payment-gateway'),
 				'type' => 'checkbox',
-				'label' => __('Enable Rocketfuel', 'rocketfuel-payment-gateway'),
+				'label' => __('Enable Shark_Processing', 'shark_processing-payment-gateway'),
 				'default' => 'yes'
 			),
 			'title' => array(
-				'title' => __('Title', 'rocketfuel-payment-gateway'),
+				'title' => __('Title', 'shark_processing-payment-gateway'),
 				'type' => 'text',
-				'description' => __('This controls the title which the user sees during checkout.', 'rocketfuel-payment-gateway'),
-				'default' => __('Rocketfuel', 'rocketfuel-payment-gateway'),
+				'description' => __('This controls the title which the user sees during checkout.', 'shark_processing-payment-gateway'),
+				'default' => __('Shark_Processing', 'shark_processing-payment-gateway'),
 				'desc_tip'      => true,
 			),
 
 			'environment' => array(
-				'title' => __('Working environment', 'rocketfuel-payment-gateway'),
+				'title' => __('Working environment', 'shark_processing-payment-gateway'),
 				'type' => 'select',
 				'default' => 'prod',
 				'options' =>  array(
@@ -114,45 +114,45 @@ class Rocketfuel_Gateway_Controller extends \WC_Payment_Gateway
 				)
 			),
 			'description' => array(
-				'title' => __('Customer Message', 'rocketfuel-payment-gateway'),
+				'title' => __('Customer Message', 'shark_processing-payment-gateway'),
 				'type' => 'textarea',
 				'default' => 'Pay for your order with RocketFuel'
 			),
 			'merchant_id' => array(
-				'title' => __('Merchant ID', 'rocketfuel-payment-gateway'),
+				'title' => __('Merchant ID', 'shark_processing-payment-gateway'),
 				'type' => 'text',
 				'default' => ''
 			),
 			'public_key' => array(
-				'title' => __('Public Key', 'rocketfuel-payment-gateway'),
+				'title' => __('Public Key', 'shark_processing-payment-gateway'),
 				'type' => 'textarea',
 				'default' => ''
 			), 'email' => array(
-				'title' => __('Email', 'rocketfuel-payment-gateway'),
+				'title' => __('Email', 'shark_processing-payment-gateway'),
 				'type' => 'text',
 				'default' => ''
 			), 'password' => array(
-				'title' => __('Password', 'rocketfuel-payment-gateway'),
+				'title' => __('Password', 'shark_processing-payment-gateway'),
 				'type' => 'password',
 				'default' => ''
 			),
 			'payment_complete_order_status' => array(
-				'title' => __('Order Status for Completed Payment', 'rocketfuel-payment-gateway'),
+				'title' => __('Order Status for Completed Payment', 'shark_processing-payment-gateway'),
 				'type' => 'select',
 				'default' => 'wc-completed',
 				'options' =>  $all_wc_order_status
 			),
 			'callback_url' => array(
-				'title' => __('Callback URL', 'rocketfuel-payment-gateway'),
+				'title' => __('Callback URL', 'shark_processing-payment-gateway'),
 				'type' => 'checkbox',
 				'label' => esc_url(rest_url() . Plugin::get_api_route_namespace() . '/payment'),
-				'description' => __('Callback URL for Rocketfuel', 'rocketfuel-payment-gateway'),
+				'description' => __('Callback URL for Shark_Processing', 'shark_processing-payment-gateway'),
 				'default' => '',
 				'css' => 'display:none'
 			 
 			),
 			'button_text' => array(
-				'title' => __('Button Text', 'rocketfuel-payment-gateway'),
+				'title' => __('Button Text', 'shark_processing-payment-gateway'),
 				'type' => 'text',
 				'default' => 'Pay with Crypto',
 				'required' => true,
@@ -168,44 +168,44 @@ class Rocketfuel_Gateway_Controller extends \WC_Payment_Gateway
 		return $this->merchant_id;
 	}
 	/**
-	 * Rocketfuel Place order Button
+	 * Shark_Processing Place order Button
 	 * @return void
 	 */
-	public function rocketfuel_place_order()
+	public function shark_processing_place_order()
 	{
 		if (!$this->password || !$this->email) {
-			echo '<span style="color:red">' . esc_html(___('Vendor should fill in the settings page to start using Rocketfuel', 'rocketfuel-payment-gateway')) . '</span>';
+			echo '<span style="color:red">' . esc_html(___('Vendor should fill in the settings page to start using Shark_Processing', 'shark_processing-payment-gateway')) . '</span>';
 			return;
 		}
-		wp_enqueue_script('wc-gateway-rkfl-script');
+		wp_enqueue_script('wc-gateway-shark_processing-script');
 
-		wp_enqueue_script('wc-gateway-rkfl-payment-buttons');
+		wp_enqueue_script('wc-gateway-shark_processing-payment-buttons');
 
 
-		$temp_orderid_rocketfuel = '';
+		$temp_orderid_shark_processing = '';
 
 ?>
 
 
 
 		<div>
-			<div id="rocketfuel_retrigger_payment_button" class="rocketfuel_retrigger_payment_button" data-rkfl-button-text="<?php echo esc_attr($this->button_text); ?>"><?php echo esc_html($this->button_text); ?></div>
-			<input type="hidden" name="merchant_auth_rocketfuel" value="<?php echo esc_attr($this->merchant_auth()); ?>">
-			<input type="hidden" name="encrypted_req_rocketfuel" value="">
+			<div id="shark_processing_retrigger_payment_button" class="shark_processing_retrigger_payment_button" data-shark_processing-button-text="<?php echo esc_attr($this->button_text); ?>"><?php echo esc_html($this->button_text); ?></div>
+			<input type="hidden" name="merchant_auth_shark_processing" value="<?php echo esc_attr($this->merchant_auth()); ?>">
+			<input type="hidden" name="encrypted_req_shark_processing" value="">
 
 
-			<input type="hidden" name="payment_status_rocketfuel" value="pending">
+			<input type="hidden" name="payment_status_shark_processing" value="pending">
 
 			<input type="hidden" name="payment_complete_order_status" value="<?php echo esc_attr($this->payment_complete_order_status); ?>">
 
 
-			<input type="hidden" name="temp_orderid_rocketfuel" value="<?php echo esc_attr($temp_orderid_rocketfuel); ?>">
+			<input type="hidden" name="temp_orderid_shark_processing" value="<?php echo esc_attr($temp_orderid_shark_processing); ?>">
 
-			<input type="hidden" name="order_status_rocketfuel" value="wc-on-hold">
+			<input type="hidden" name="order_status_shark_processing" value="wc-on-hold">
 
-			<input type="hidden" name="environment_rocketfuel" value="<?php echo  esc_attr($this->environment); ?>">
+			<input type="hidden" name="environment_shark_processing" value="<?php echo  esc_attr($this->environment); ?>">
 
-			<script src="<?php echo esc_url(Plugin::get_url('assets/js/rkfl-iframe.js')).'?ver=' . esc_html(Plugin::get_ver()); ?>">
+			<script src="<?php echo esc_url(Plugin::get_url('assets/js/shark_processing-iframe.js')).'?ver=' . esc_html(Plugin::get_ver()); ?>">
 			</script>
 			
 
@@ -477,7 +477,7 @@ class Rocketfuel_Gateway_Controller extends \WC_Payment_Gateway
 
 	}
 	/**
-	 * Check if Rocketfuel merchant details is filled.
+	 * Check if Shark_Processing merchant details is filled.
 	 */
 	public function admin_notices() {
 
@@ -487,7 +487,7 @@ class Rocketfuel_Gateway_Controller extends \WC_Payment_Gateway
 
 		// Check required fields.
 		if ( ! ( $this->public_key && $this->password ) ) {
-			echo '<div class="error"><p>' . sprintf( esc_html(__( 'Please enter your Rocketfuel merchant details <a href="%s">here</a> to be able to use the Rocketfuel WooCommerce plugin.', 'rocketfuel-payment-gateway' )), esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=rocketfuel_gateway' ) ) ,'https://rocketfuelblockchain.com') . '</p></div>';
+			echo '<div class="error"><p>' . sprintf( esc_html(__( 'Please enter your Shark_Processing merchant details <a href="%s">here</a> to be able to use the Shark_Processing WooCommerce plugin.', 'shark_processing-payment-gateway' )), esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=shark_processing_gateway' ) ) ,'https://shark_processingblockchain.com') . '</p></div>';
 			return;
 		}
 
