@@ -9,6 +9,7 @@ class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 	public function __construct()
 	{
 		$this->id = 'shark_processing_gateway';
+		$this->icon = Plugin::get_url('assets/img/logo.svg');
 
 		$this->has_fields = false;
 
