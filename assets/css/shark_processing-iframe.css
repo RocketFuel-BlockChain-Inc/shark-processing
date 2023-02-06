@@ -77,7 +77,7 @@ h3.indicate_text {
 
 #shark_processing_retrigger_payment button {
     text-align: center;
-    background: #f0833c !important;
+    background: #264055 !important;
     padding: 0px;
     border: none;
     width: 300px;
@@ -160,7 +160,7 @@ h3.indicate_text {
 
 .shark_processing_retrigger_payment_button {
     padding: 10px;
-    background: #f0833c;
+    background: #264055;
     color: #fff;
     cursor: pointer;
     max-width: 200px;
