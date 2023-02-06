@@ -7,14 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInit75bc328f211181492efb60450ecb464c
 {
     public static $prefixLengthsPsr4 = array (
-        'R' => 
+        'S' => 
         array (
-            'Rocketfuel_Gateway\\' => 19,
+            'Shark_Processing_Gateway\\' => 25,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Rocketfuel_Gateway\\' => 
+        'Shark_Processing_Gateway\\' => 
         array (
             0 => __DIR__ . '/../..' . '/',
         ),
@@ -22,14 +22,18 @@ class ComposerStaticInit75bc328f211181492efb60450ecb464c
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Rocketfuel_Gateway\\Controllers\\Activation_Controller' => __DIR__ . '/../..' . '/Controllers/Activation_Controller.php',
-        'Rocketfuel_Gateway\\Controllers\\Process_Payment_Controller' => __DIR__ . '/../..' . '/Controllers/Process_Payment_Controller.php',
-        'Rocketfuel_Gateway\\Controllers\\Rest_Controller' => __DIR__ . '/../..' . '/Controllers/Rest_Controller.php',
-        'Rocketfuel_Gateway\\Controllers\\Rocketfuel_Gateway_Controller' => __DIR__ . '/../..' . '/Controllers/Rocketfuel_Gateway_Controller.php',
-        'Rocketfuel_Gateway\\Controllers\\Webhook_Controller' => __DIR__ . '/../..' . '/Controllers/Webhook_Controller.php',
-        'Rocketfuel_Gateway\\Controllers\\Woocommerce_Controller' => __DIR__ . '/../..' . '/Controllers/Woocommerce_Controller.php',
-        'Rocketfuel_Gateway\\Helpers\\View' => __DIR__ . '/../..' . '/Helpers/View.php',
-        'Rocketfuel_Gateway\\Plugin' => __DIR__ . '/../..' . '/Plugin.php',
+        'Shark_Processing_Gateway\\Controllers\\Activation_Controller' => __DIR__ . '/../..' . '/Controllers/Activation_Controller.php',
+        'Shark_Processing_Gateway\\Controllers\\Cart_Handler_Controller' => __DIR__ . '/../..' . '/Controllers/Cart_Handler_Controller.php',
+        'Shark_Processing_Gateway\\Controllers\\Process_Payment_Controller' => __DIR__ . '/../..' . '/Controllers/Process_Payment_Controller.php',
+        'Shark_Processing_Gateway\\Controllers\\Rest_Controller' => __DIR__ . '/../..' . '/Controllers/Rest_Controller.php',
+        'Shark_Processing_Gateway\\Controllers\\Shark_Processing_Gateway_Controller' => __DIR__ . '/../..' . '/Controllers/Shark_Processing_Gateway_Controller.php',
+        'Shark_Processing_Gateway\\Controllers\\Shark_Processing_Gateway_Subscription_Controller' => __DIR__ . '/../..' . '/Controllers/Shark_Processing_Gateway_Subscription_Controller.php',
+        'Shark_Processing_Gateway\\Controllers\\Webhook_Controller' => __DIR__ . '/../..' . '/Controllers/Webhook_Controller.php',
+        'Shark_Processing_Gateway\\Controllers\\Woocommerce_Controller' => __DIR__ . '/../..' . '/Controllers/Woocommerce_Controller.php',
+        'Shark_Processing_Gateway\\Helpers\\Common' => __DIR__ . '/../..' . '/Helpers/Common.php',
+        'Shark_Processing_Gateway\\Helpers\\View' => __DIR__ . '/../..' . '/Helpers/View.php',
+        'Shark_Processing_Gateway\\Plugin' => __DIR__ . '/../..' . '/Plugin.php',
+        'Shark_Processing_Gateway\\Services\\Subscription_Service' => __DIR__ . '/../..' . '/Services/Subscription_Service.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

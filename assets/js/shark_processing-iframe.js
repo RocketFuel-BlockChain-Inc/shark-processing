@@ -176,14 +176,9 @@
 
         },
         triggerPlaceOrder: function () {
-            // document.getElementById('place_order').style.display = 'inherit';
-            console.log('Trigger is calling');
-   
+    
             $('form.checkout').trigger('submit');
-
-            // document.getElementById('place_order').style.display = 'none';
-
-            console.log('Trigger has neen called ');
+        
         },
         updateOrder: function (result) {
             try {
@@ -277,7 +272,7 @@ console.log('retrying');
             window.addEventListener('message', (event) => {
 
                 switch (event.data.type) {
-                    case 'shark_processing_iframe_close':
+                    case 'rocketfuel_iframe_close':
                         console.log('Event from shark_processing_iframe_close', event.data);
 
 
@@ -290,7 +285,7 @@ console.log('retrying');
                             engine.prepareRetrigger();
                         }
                         break;
-                    case 'shark_processing_new_height':
+                    case 'rocketfuel_new_height':
                         engine.prepareProgressMessage();
 
                         engine.watchIframeShow = false;
@@ -299,7 +294,7 @@ console.log('retrying');
                         document.getElementById('shark_processing_retrigger_payment_button').style.opacity = 0.5;
 
 
-                    case 'shark_processing_result_ok':
+                    case 'rocketfuel_result_ok':
 
 
 

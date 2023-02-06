@@ -351,20 +351,13 @@ class Cart_Handler_Controller{
                 }
             
             }
-// 			{"temporary_order_id":"84f7809bde45a1b6de15ae93a6e4bf4a","uuid":"2219ab84-f8b4-45d6-abb9-1c9da38a461e"}
             update_option( 'shark_processing_partial_payment_cache_'.$email, 
                 array(
                     'temporary_order_id' => $temporary_order_id,
                     'uuid'=>$payment_response->result->uuid
                 ),
             false );
-// 			    update_option( 'shark_processing_partial_payment_cache_'.$email, 
-//                 array(
-//                     'temporary_order_id' => '84f7809bde45a1b6de15ae93a6e4bf4a',
-//                     'uuid'=>'2219ab84-f8b4-45d6-abb9-1c9da38a461e'
-//                 ),
-//             false );
-         
+
              wp_send_json_success( array( 
                     'encrypted_req' => $encrypted_req,
                     'temporary_order_id' => $temporary_order_id,

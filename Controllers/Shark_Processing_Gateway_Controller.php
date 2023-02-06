@@ -12,9 +12,9 @@ class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 
 		$this->has_fields = false;
 
-		$this->method_title = 'Shark_Processing';
+		$this->method_title = 'Shark Pay';
 
-		$this->method_description = 'Pay with Crypto using Shark_Processing';
+		$this->method_description = 'Pay with Crypto using Shark Pay';
 
 		$this->init_form_fields();
 
@@ -69,14 +69,11 @@ class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 	{
 
 		$environment_data = array(
-			'prod'    => 'https://app.shark_processingblockchain.com/api',
-			'dev'     => 'https://dev-app.rocketdemo.net/api',
-			'stage2'  => 'https://qa-app.rocketdemo.net/api',
-			'preprod' => 'https://preprod-app.rocketdemo.net/api',	
-			'sandbox' => 'https://app-sandbox.shark_processingblockchain.com/api',
+			'prod'    => 'https://app.rocketfuelblockchain.com/api',	
+			'sandbox' => 'https://app-sandbox.rocketfuelblockchain.com/api',
 		);
 
-		return isset($environment_data[$environment]) ? $environment_data[$environment] : 'https://app.shark_processingblockchain.com/api';
+		return isset($environment_data[$environment]) ? $environment_data[$environment] : 'https://app.rocketfuelblockchain.com/api';
 	}
 	/**
 	 * Admin form field
@@ -89,14 +86,14 @@ class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 			'enabled' => array(
 				'title' => __('Enable/Disable', 'shark_processing-payment-gateway'),
 				'type' => 'checkbox',
-				'label' => __('Enable Shark_Processing', 'shark_processing-payment-gateway'),
+				'label' => __('Enable Shark Pay', 'shark_processing-payment-gateway'),
 				'default' => 'yes'
 			),
 			'title' => array(
 				'title' => __('Title', 'shark_processing-payment-gateway'),
 				'type' => 'text',
 				'description' => __('This controls the title which the user sees during checkout.', 'shark_processing-payment-gateway'),
-				'default' => __('Shark_Processing', 'shark_processing-payment-gateway'),
+				'default' => __('Shark Pay', 'shark_processing-payment-gateway'),
 				'desc_tip'      => true,
 			),
 
@@ -106,17 +103,15 @@ class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 				'default' => 'prod',
 				'options' =>  array(
 					'prod' => 'Production',
-					'dev' => 'Development',
-					'stage2' => 'QA',
-					'preprod' => 'Pre-Production',
+				
 					'sandbox' => 'Sandbox',
-					'local' => 'local'
+				 
 				)
 			),
 			'description' => array(
 				'title' => __('Customer Message', 'shark_processing-payment-gateway'),
 				'type' => 'textarea',
-				'default' => 'Pay for your order with RocketFuel'
+				'default' => 'Pay for your order with Shark Pay'
 			),
 			'merchant_id' => array(
 				'title' => __('Merchant ID', 'shark_processing-payment-gateway'),
@@ -146,7 +141,7 @@ class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 				'title' => __('Callback URL', 'shark_processing-payment-gateway'),
 				'type' => 'checkbox',
 				'label' => esc_url(rest_url() . Plugin::get_api_route_namespace() . '/payment'),
-				'description' => __('Callback URL for Shark_Processing', 'shark_processing-payment-gateway'),
+				'description' => __('Callback URL for Shark Pay', 'shark_processing-payment-gateway'),
 				'default' => '',
 				'css' => 'display:none'
 			 
@@ -487,7 +482,7 @@ class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 
 		// Check required fields.
 		if ( ! ( $this->public_key && $this->password ) ) {
-			echo '<div class="error"><p>' . sprintf( esc_html(__( 'Please enter your Shark_Processing merchant details <a href="%s">here</a> to be able to use the Shark_Processing WooCommerce plugin.', 'shark_processing-payment-gateway' )), esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=shark_processing_gateway' ) ) ,'https://shark_processingblockchain.com') . '</p></div>';
+			echo '<div class="error"><p>' . sprintf( esc_html(__( 'Please enter your Shark_Processing merchant details <a href="%s">here</a> to be able to use the Shark Processing WooCommerce plugin.', 'shark_processing-payment-gateway' )), esc_url( admin_url( 'admin.php?page=wc-settings&tab=checkout&section=shark_processing_gateway' ) ) ,'https://rocketfuelblockchain.com') . '</p></div>';
 			return;
 		}
 

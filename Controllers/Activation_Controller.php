@@ -1,6 +1,6 @@
 <?php
 
-namespace Shark_Gateway\Controllers;
+namespace Shark_Processing_Gateway\Controllers;
 
 use Shark_Processing_Gateway\Plugin;
 

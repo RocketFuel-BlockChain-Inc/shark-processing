@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( shark_processing_check_woocommerce_is_active() ) {
-    define( 'ROCKETFUEL_VER', '3.2.1.22' );
+    define( 'SHARK_PROCESSING_VER', '3.2.1.22' );
     
     require_once plugin_dir_path( __FILE__ ) . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
     Plugin::init( __FILE__ );

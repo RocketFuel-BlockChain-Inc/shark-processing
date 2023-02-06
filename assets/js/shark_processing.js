@@ -5,25 +5,22 @@
     this.iframeInfo = {
       iframe: null,
       iframeData: null,
-      iFrameId: 'Shark_Processing',
+      iFrameId: 'Rocketfuel',
       iframeUrl: {
-        prod: `https://iframe.shark_processingblockchain.com`,
+        prod: `https://iframe.rocketfuelblockchain.com`,
         stage2: `https://qa-iframe.rocketdemo.net/`,
-        local: `http://192.168.0.181:8080/`,
-
+     
         preprod: `https://preprod-iframe.rocketdemo.net/`,
-        dev: `https://dev-iframe.rocketdemo.net/`,
-        sandbox: `https://iframe-sandbox.shark_processingblockchain.com`,
+      
+        sandbox: `https://iframe-sandbox.rocketfuelblockchain.com`,
       },
       isOverlay: false
     };
     this.domain = {
-      prod: `https://app.shark_processingblockchain.com/api`,
+      prod: `https://app.rocketfuelblockchain.com/api`,
       stage2: `https://qa-app.rocketdemo.net/api`,
-      local: `http://c334-102-89-45-112.ngrok.io/api`,
-      preprod: `https://preprod-app.rocketdemo.net/api`,
-      dev: 'https://dev-app.rocketdemo.net/api',
-      sandbox: `https://app-sandbox.shark_processingblockchain.com/api`,
+     
+      sandbox: `https://app-sandbox.rocketfuelblockchain.com/api`,
     };
     window.iframeInfo = this.iframeInfo;
     this.shark_processingToken = null
@@ -130,14 +127,10 @@
   }
   this.RocketFuel.prototype.shark_processingAutoSignUp = async function (data, env) {
 
-
-
     const shark_processingToken = await autoSignUp(data, this.domain, env);
     if (!shark_processingToken || !shark_processingToken.ok) {
       removeLocalStorage();
-    setLocalStorage('shark_processing_email', shark_processingToken.data.email);
-
-      
+      setLocalStorage('shark_processing_email', shark_processingToken.data.email);
       return null
     }
     setLocalStorage('access', shark_processingToken.result.access);
@@ -203,7 +196,7 @@
   }
   function initializeEvents(iframeInfo, rocketFuelDefaultOptions) {
     window.addEventListener("message", async (event) => {
-      if (event.data.type === "shark_processing_new_height") {
+      if (event.data.type === "rocketfuel_new_height") {
         const iframe = document.getElementById(iframeInfo.iFrameId);
         if (!!iframe) {
           const windowHeight = window.innerHeight - 20;
@@ -211,7 +204,7 @@
             iframe.style.height = windowHeight + "px";
             iframe.contentWindow.postMessage(
               {
-                type: "shark_processing_max_height",
+                type: "rocketfuel_max_height",
                 data: windowHeight,
               },
               "*"
@@ -221,14 +214,14 @@
           }
         }
       }
-      if (event.data.type === "shark_processing_change_height") {
+      if (event.data.type === "rocketfuel_change_height") {
         document.getElementById(iframeInfo.iFrameId).style.height = event.data.data;
       }
 
-      if (event.data.type === "shark_processing_get_cart") {
+      if (event.data.type === "rocketfuel_get_cart") {
         await sendCartToIframe();
       }
-      if (event.data.type === "shark_processing_iframe_close") {
+      if (event.data.type === "rocketfuel_iframe_close") {
         closeOverlay(iframeInfo);
         // if(window.paymentdone && window.redirectUrl) {
         if (window.redirectUrl) {
@@ -239,7 +232,7 @@
         console.log('[PUSH_MESSAGE_TO_ANDROID]', window.Android && window.Android.shareData(JSON.stringify(event.data)));
         window.Android && window.Android.shareData(JSON.stringify(event.data));
       }
-      if (event.data.type === "shark_processing_result_ok") {
+      if (event.data.type === "rocketfuel_result_ok") {
         window.paymentdone = true;
         if (rocketFuelDefaultOptions.callback) {
           rocketFuelDefaultOptions.callback(event.data.response);
@@ -411,7 +404,7 @@
 
       iframe.contentWindow.postMessage(
         {
-          type: "shark_processing_send_cart",
+          type: "rocketfuel_send_cart",
           data: iframeInfo.iframeData,
         },
         "*"

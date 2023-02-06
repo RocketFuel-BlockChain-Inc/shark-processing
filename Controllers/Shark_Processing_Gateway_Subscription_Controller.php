@@ -261,13 +261,13 @@ class Shark_Processing_Gateway_Subscription_Controller extends Shark_Processing_
 			$response = Subscription_Service::debit_shopper_for_subscription($payload, $this->endpoint);
 
 		 
-if($response->statusCode === '400'){
-	return new WP_Error( 'shark_processing_error', $response );
+			if($response->statusCode === '400'){
+				return new WP_Error( 'shark_processing_error', $response );
 
-}else{
-	$order->payment_complete();
-}
-			
+			}else{
+				$order->payment_complete();
+			}
+						
 
 			return true;
 		} catch (\Throwable $th) {

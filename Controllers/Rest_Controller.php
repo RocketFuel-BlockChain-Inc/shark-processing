@@ -2,8 +2,6 @@
 namespace Shark_Processing_Gateway\Controllers;
 
 use Shark_Processing_Gateway\Plugin;
-use Shark_Processing_Gateway\Controllers\Process_Payment_Controller;
-
 class Rest_Controller{
     /**
      * Register Rest Hook
