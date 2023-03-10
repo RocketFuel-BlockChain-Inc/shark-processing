@@ -204,7 +204,12 @@ class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 			<script src="<?php echo esc_url(Plugin::get_url('assets/js/shark_processing-iframe.js')).'?ver=' . esc_html(Plugin::get_ver()); ?>">
 			</script>
 			
-
+			<style>
+				.payment_method_shark_processing_gateway img{
+					width: 65px;
+					max-width: 65px;
+				}
+			</style>
 		</div>
 
 
