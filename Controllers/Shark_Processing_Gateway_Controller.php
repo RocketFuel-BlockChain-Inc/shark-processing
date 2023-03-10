@@ -170,7 +170,7 @@ class Shark_Processing_Gateway_Controller extends \WC_Payment_Gateway
 	public function shark_processing_place_order()
 	{
 		if (!$this->password || !$this->email) {
-			echo '<span style="color:red">' . esc_html(___('Vendor should fill in the settings page to start using Shark_Processing', 'shark_processing-payment-gateway')) . '</span>';
+			echo '<span style="color:red">' . esc_html(__('Vendor should fill in the settings page to start using Shark_Processing', 'shark_processing-payment-gateway')) . '</span>';
 			return;
 		}
 		wp_enqueue_script('wc-gateway-shark_processing-script');
