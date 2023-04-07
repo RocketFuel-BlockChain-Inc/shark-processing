@@ -206,7 +206,7 @@ class Webhook_Controller
 	 */
 	private static function get_gateway()
 	{
-		return new Rocketfuel_Gateway_Controller();
+		return new Shark_Processing_Gateway_Controller();
 	}
 	public static function get_helper()
 	{
