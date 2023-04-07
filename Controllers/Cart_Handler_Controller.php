@@ -3,258 +3,262 @@
 namespace Shark_Processing_Gateway\Controllers;
 
 use Shark_Processing_Gateway\Plugin;
+
 /**
  *
  */
-class Cart_Handler_Controller {
+class Cart_Handler_Controller
+{
 
 
 	/**
 	 * Registers actions
 	 */
-	public static function register() {
+	public static function register()
+	{
 
 		add_action(
-			'wc_ajax_wc_rkfl_start_checkout',
+			'wc_ajax_wc_shark_processing_start_checkout',
 			array(
 				__CLASS__,
-				'rocketfuel_process_checkout',
+				'shark_processing_process_checkout',
 			)
 		);
 	}
-	public static function sort_shipping_address_raw() {
+	public static function sort_shipping_address_raw()
+	{
 
-		$phone = method_exists( WC()->customer, 'get_shipping_phone' ) ?
-			WC()->customer->get_shipping_phone() : ( method_exists( WC()->customer, 'get_billing_phone' ) ? WC()->customer->get_billing_phone() : false );
+		$phone = method_exists(WC()->customer, 'get_shipping_phone') ?
+			WC()->customer->get_shipping_phone() : (method_exists(WC()->customer, 'get_billing_phone') ? WC()->customer->get_billing_phone() : false);
 
 		// if (!$phone) {
 		// return null;
 		// }
 
-		$zipcode = method_exists( WC()->customer, 'get_shipping_postcode' ) ?
+		$zipcode = method_exists(WC()->customer, 'get_shipping_postcode') ?
 			WC()->customer->get_shipping_postcode() : false;
 
-		$email = method_exists( WC()->customer, 'get_email' ) ?
+		$email = method_exists(WC()->customer, 'get_email') ?
 			WC()->customer->get_email() : false;
 
-		$country_code = method_exists( WC()->customer, 'get_shipping_country' ) ?
+		$country_code = method_exists(WC()->customer, 'get_shipping_country') ?
 			WC()->customer->get_shipping_country() : '';
 
-		$country = ! ! $country_code ? WC()->countries->countries[ $country_code ] : '';
+		$country = !!$country_code ? WC()->countries->countries[$country_code] : '';
 		// if (!$country) {
 		// return null;
 		// }
-		$state_code = method_exists( WC()->customer, 'get_shipping_state' ) ?
+		$state_code = method_exists(WC()->customer, 'get_shipping_state') ?
 			WC()->customer->get_shipping_state() : '';
 
-		$states = $state_code ? WC()->countries->get_states( $country_code ) : array();
+		$states = $state_code ? WC()->countries->get_states($country_code) : array();
 
-		$state = ! empty( $states[ $state_code ] ) ? $states[ $state_code ] : $state_code;
+		$state = !empty($states[$state_code]) ? $states[$state_code] : $state_code;
 		// if (!$state) {
 		// return null;
 		// }
-		$address1 = method_exists( WC()->customer, 'get_shipping_address' ) ?
+		$address1 = method_exists(WC()->customer, 'get_shipping_address') ?
 			WC()->customer->get_shipping_address() : '';
 
 		// if (!$address1) {
 		// return null;
 		// }
 
-		$city = method_exists( WC()->customer, 'get_shipping_city' ) ?
+		$city = method_exists(WC()->customer, 'get_shipping_city') ?
 			WC()->customer->get_shipping_city() : '';
 
 		// if (!$city) {
 		// return null;
 		// }
-		$firstname = isset( $_GET['firstname'] ) ?
-			sanitize_text_field( wp_unslash( $_GET['firstname'] ) ) : '';
+		$firstname = isset($_GET['firstname']) ?
+			sanitize_text_field(wp_unslash($_GET['firstname'])) : '';
 
-		$lastname = isset( $_GET['lastname'] ) ?
-			sanitize_text_field( wp_unslash( $_GET['lastname'] ) ) : '';
+		$lastname = isset($_GET['lastname']) ?
+			sanitize_text_field(wp_unslash($_GET['lastname'])) : '';
 
 		return array(
-			'phoneNo'   => $phone ? $phone : ( method_exists( WC()->customer, 'get_billing_phone' ) ?
-				WC()->customer->get_billing_phone() : '' ),
-			'email'     => $email ? $email : ( method_exists( WC()->customer, 'get_billing_email' ) ?
-				WC()->customer->get_billing_email() : '' ),
+			'phoneNo'   => $phone ? $phone : (method_exists(WC()->customer, 'get_billing_phone') ?
+				WC()->customer->get_billing_phone() : ''),
+			'email'     => $email ? $email : (method_exists(WC()->customer, 'get_billing_email') ?
+				WC()->customer->get_billing_email() : ''),
 			'address1'  => $address1,
-			'address2'  => method_exists( WC()->customer, 'get_shipping_address_2' ) ?
+			'address2'  => method_exists(WC()->customer, 'get_shipping_address_2') ?
 				WC()->customer->get_shipping_address_2() : '',
 			'state'     => $state,
 			'city'      => $city,
 			'zipcode'   => $zipcode,
 			'country'   => $country,
 			'landmark'  => '',
-			'firstname' => method_exists( WC()->customer, 'get_shipping_first_name' ) ?
+			'firstname' => method_exists(WC()->customer, 'get_shipping_first_name') ?
 				WC()->customer->get_shipping_first_name() : $firstname,
-			'lastname'  => method_exists( WC()->customer, 'get_shipping_last_name' ) ?
+			'lastname'  => method_exists(WC()->customer, 'get_shipping_last_name') ?
 				WC()->customer->get_shipping_last_name() : $lastname,
 		);
 	}
-	public static function sort_billing_address_raw() {
+	public static function sort_billing_address_raw()
+	{
 
-		$phone = method_exists( WC()->customer, 'get_billing_phone' ) ?
-			WC()->customer->get_billing_phone() : ( method_exists( WC()->customer, 'get_shipping_phone' ) ? WC()->customer->get_shipping_phone() : false );
+		$phone = method_exists(WC()->customer, 'get_billing_phone') ?
+			WC()->customer->get_billing_phone() : (method_exists(WC()->customer, 'get_shipping_phone') ? WC()->customer->get_shipping_phone() : false);
 
 		// if (!$phone) {
 		// return null;
 		// }
 
-		$zipcode = method_exists( WC()->customer, 'get_billing_postcode' ) ?
+		$zipcode = method_exists(WC()->customer, 'get_billing_postcode') ?
 			WC()->customer->get_billing_postcode() : false;
 
-		$email = method_exists( WC()->customer, 'get_email' ) ?
+		$email = method_exists(WC()->customer, 'get_email') ?
 			WC()->customer->get_email() : false;
 
-		$country_code = method_exists( WC()->customer, 'get_billing_country' ) ?
+		$country_code = method_exists(WC()->customer, 'get_billing_country') ?
 			WC()->customer->get_billing_country() : '';
 
-		$country = ! ! $country_code ? WC()->countries->countries[ $country_code ] : '';
+		$country = !!$country_code ? WC()->countries->countries[$country_code] : '';
 		// if (!$country) {
 		// return null;
 		// }
-		$state_code = method_exists( WC()->customer, 'get_billing_state' ) ?
+		$state_code = method_exists(WC()->customer, 'get_billing_state') ?
 			WC()->customer->get_billing_state() : '';
 
-		$states = $state_code ? WC()->countries->get_states( $country_code ) : array();
+		$states = $state_code ? WC()->countries->get_states($country_code) : array();
 
-		$state = ! empty( $states[ $state_code ] ) ? $states[ $state_code ] : $state_code;
+		$state = !empty($states[$state_code]) ? $states[$state_code] : $state_code;
 		// if (!$state) {
 		// return null;
 		// }
-		$address1 = method_exists( WC()->customer, 'get_billing_address' ) ?
+		$address1 = method_exists(WC()->customer, 'get_billing_address') ?
 			WC()->customer->get_billing_address() : '';
 
 		// if (!$address1) {
 		// return null;
 		// }
 
-		$city = method_exists( WC()->customer, 'get_billing_city' ) ?
+		$city = method_exists(WC()->customer, 'get_billing_city') ?
 			WC()->customer->get_billing_city() : '';
 
 		// if (!$city) {
 		// return null;
 		// }
-		$firstname = isset( $_GET['firstname'] ) ?
-			sanitize_text_field( wp_unslash( $_GET['firstname'] ) ) : '';
+		$firstname = isset($_GET['firstname']) ?
+			sanitize_text_field(wp_unslash($_GET['firstname'])) : '';
 
-		$lastname = isset( $_GET['lastname'] ) ?
-			sanitize_text_field( wp_unslash( $_GET['lastname'] ) ) : '';
+		$lastname = isset($_GET['lastname']) ?
+			sanitize_text_field(wp_unslash($_GET['lastname'])) : '';
 
 		return array(
-			'phoneNo'   => $phone ? $phone : ( method_exists( WC()->customer, 'get_billing_phone' ) ?
-				WC()->customer->get_billing_phone() : '' ),
-			'email'     => $email ? $email : ( method_exists( WC()->customer, 'get_billing_email' ) ?
-				WC()->customer->get_billing_email() : '' ),
+			'phoneNo'   => $phone ? $phone : (method_exists(WC()->customer, 'get_billing_phone') ?
+				WC()->customer->get_billing_phone() : ''),
+			'email'     => $email ? $email : (method_exists(WC()->customer, 'get_billing_email') ?
+				WC()->customer->get_billing_email() : ''),
 			'address1'  => $address1,
-			'address2'  => method_exists( WC()->customer, 'get_shipping_address_2' ) ?
+			'address2'  => method_exists(WC()->customer, 'get_shipping_address_2') ?
 				WC()->customer->get_shipping_address_2() : '',
 			'state'     => $state,
 			'city'      => $city,
 			'zipcode'   => $zipcode,
 			'country'   => $country,
 			'landmark'  => '',
-			'firstname' => method_exists( WC()->customer, 'get_shipping_first_name' ) ?
+			'firstname' => method_exists(WC()->customer, 'get_shipping_first_name') ?
 				WC()->customer->get_shipping_first_name() : $firstname,
-			'lastname'  => method_exists( WC()->customer, 'get_shipping_last_name' ) ?
+			'lastname'  => method_exists(WC()->customer, 'get_shipping_last_name') ?
 				WC()->customer->get_shipping_last_name() : $lastname,
 		);
 	}
-	public static function sort_shipping_address() {
+	public static function sort_shipping_address()
+	{
 
 		$shipping_raw = self::sort_shipping_address_raw();
 
-		if ( ! $shipping_raw['phoneNo'] ) {
+		if (!$shipping_raw['phoneNo']) {
 			return null;
 		}
 
-		if ( ! $shipping_raw['country'] ) {
+		if (!$shipping_raw['country']) {
 			return null;
 		}
 
-		if ( ! $shipping_raw['state'] ) {
+		if (!$shipping_raw['state']) {
 			return null;
 		}
 
-		if ( ! $shipping_raw['address1'] ) {
+		if (!$shipping_raw['address1']) {
 			return null;
 		}
 
-		if ( ! $shipping_raw['city'] ) {
+		if (!$shipping_raw['city']) {
 			return null;
 		}
 
 		return $shipping_raw;
 		return array(
-			'phoneNo'   => $phone ? $phone : ( method_exists( WC()->customer, 'get_billing_phone' ) ?
-				WC()->customer->get_billing_phone() : '' ),
-			'email'     => $email ? $email : ( method_exists( WC()->customer, 'get_billing_email' ) ?
-				WC()->customer->get_billing_email() : '' ),
+			'phoneNo'   => $phone ? $phone : (method_exists(WC()->customer, 'get_billing_phone') ?
+				WC()->customer->get_billing_phone() : ''),
+			'email'     => $email ? $email : (method_exists(WC()->customer, 'get_billing_email') ?
+				WC()->customer->get_billing_email() : ''),
 			'address1'  => $address1,
-			'address2'  => method_exists( WC()->customer, 'get_shipping_address_2' ) ?
+			'address2'  => method_exists(WC()->customer, 'get_shipping_address_2') ?
 				WC()->customer->get_shipping_address_2() : '',
 			'state'     => $state,
 			'city'      => $city,
 			'zipcode'   => $zipcode,
 			'country'   => $country,
 			'landmark'  => '',
-			'firstname' => method_exists( WC()->customer, 'get_shipping_first_name' ) ?
+			'firstname' => method_exists(WC()->customer, 'get_shipping_first_name') ?
 				WC()->customer->get_shipping_first_name() : $firstname,
-			'lastname'  => method_exists( WC()->customer, 'get_shipping_last_name' ) ?
+			'lastname'  => method_exists(WC()->customer, 'get_shipping_last_name') ?
 				WC()->customer->get_shipping_last_name() : $lastname,
 		);
 	}
-	public static function sort_billing_address() {
+	public static function sort_billing_address()
+	{
 		$billing_raw = self::sort_billing_address_raw();
 
-		if ( ! $billing_raw['phoneNo'] ) {
+		if (!$billing_raw['phoneNo']) {
 			return null;
 		}
 
-		if ( ! $billing_raw['country'] ) {
+		if (!$billing_raw['country']) {
 			return null;
 		}
-		if ( ! $billing_raw['state'] ) {
-			return null;
-		}
-
-		if ( ! $billing_raw['address1'] ) {
+		if (!$billing_raw['state']) {
 			return null;
 		}
 
-		if ( ! $billing_raw['city'] ) {
+		if (!$billing_raw['address1']) {
+			return null;
+		}
+
+		if (!$billing_raw['city']) {
 			return null;
 		}
 
 		return $billing_raw;
 	}
-	public static function get_posts( $parsed_args ) {
+	public static function get_posts($parsed_args)
+	{
 
-		$get_posts = new \WP_Query( $parsed_args );
+		$get_posts = new \WP_Query($parsed_args);
 
 		return $get_posts;
 	}
 
-	public static function compare_cart_partial_tx( $external_tx_info ) {
+	public static function compare_cart_partial_tx($external_tx_info)
+	{
 
 		$external_cart_info = $external_tx_info->check;
 
-		if ( ! is_array( $external_cart_info ) ) {
+		if (!is_array($external_cart_info)) {
 			return false;
 		}
 
-		if ( $external_tx_info->nativeAmount < WC()->cart->total ) {
+		if ($external_tx_info->nativeAmount < WC()->cart->total) {
 
-			file_put_contents(
-				__DIR__ . '/partial_log.json',
-				"
-                        \n      compare result native amount is less than total",
-				FILE_APPEND
-			);
+
 			return false;
 		}
 
-		if ( count( $external_cart_info ) !== count( WC()->cart->get_cart() ) ) {
+		if (count($external_cart_info) !== count(WC()->cart->get_cart())) {
 
 			file_put_contents(
 				__DIR__ . '/partial_log.json',
@@ -266,7 +270,7 @@ class Cart_Handler_Controller {
 		}
 
 		$external_cart_id_array = array_map(
-			function ( $element ) {
+			function ($element) {
 
 				return $element->id;
 			},
@@ -275,11 +279,11 @@ class Cart_Handler_Controller {
 
 		$flag_incompatible_cart_product = false;
 
-		foreach ( WC()->cart->get_cart() as  $cart_item ) {
+		foreach (WC()->cart->get_cart() as  $cart_item) {
 
-			$is_product_present = array_search( (string) $cart_item['product_id'], $external_cart_id_array );
+			$is_product_present = array_search((string) $cart_item['product_id'], $external_cart_id_array);
 
-			if ( $is_product_present === false ) {
+			if ($is_product_present === false) {
 
 				file_put_contents(
 					__DIR__ . '/partial_log.json',
@@ -291,19 +295,21 @@ class Cart_Handler_Controller {
 			}
 		}
 
-		if ( $flag_incompatible_cart_product === true ) {
+		if ($flag_incompatible_cart_product === true) {
 
 			return false;
 		}
 
 		return true;
 	}
-	public static function days_in_secs( $days ) {
+	public static function days_in_secs($days)
+	{
 		return 60 * 60 * 24 * (int) $days;
 	}
-	public static function get_cart_products( $cart ) {
+	public static function get_cart_products($cart)
+	{
 		$cache = array();
-		foreach ( $cart as $cart_item ) {
+		foreach ($cart as $cart_item) {
 			$cache[] = array(
 				'id'       => (string) $cart_item['product_id'],
 				'quantity' => (string) $cart_item['quantity'],
@@ -311,7 +317,8 @@ class Cart_Handler_Controller {
 		}
 		return $cache;
 	}
-	public static function get_cart_shippings( $cart ) {
+	public static function get_cart_shippings($cart)
+	{
 
 		return array(
 			array(
@@ -320,7 +327,8 @@ class Cart_Handler_Controller {
 			),
 		);
 	}
-	public static function get_billing_address_for_transcient() {
+	public static function get_billing_address_for_transcient()
+	{
 		$sorted_billing = self::sort_billing_address_raw();
 
 		return array(
@@ -336,7 +344,8 @@ class Cart_Handler_Controller {
 			'country'    => $sorted_billing['country'],
 		);
 	}
-	public static function get_shipping_address_for_transcient() {
+	public static function get_shipping_address_for_transcient()
+	{
 		$sorted_shipping = self::sort_shipping_address_raw();
 
 		$address = array(
@@ -353,9 +362,10 @@ class Cart_Handler_Controller {
 		);
 		return $address;
 	}
-	public static function process_user_data() {
+	public static function process_user_data()
+	{
 
-		$temporary_order_id = md5( microtime() );
+		$temporary_order_id = md5(microtime());
 
 		// $cache_data = [
 		/**
@@ -366,12 +376,12 @@ class Cart_Handler_Controller {
 		 * payment_method = > id,title
 		 */
 		// ]
-		$gateway = new Rocketfuel_Gateway_Controller();
+		$gateway = new Shark_Processing_Gateway_Controller();
 
 		$transient_value = array(
 			'merchant_id'      => $gateway->merchant_id,
-			'products'         => self::get_cart_products( WC()->cart->get_cart() ),
-			'shippings'        => self::get_cart_shippings( WC()->cart->get_cart() ),
+			'products'         => self::get_cart_products(WC()->cart->get_cart()),
+			'shippings'        => self::get_cart_shippings(WC()->cart->get_cart()),
 			'billing_address'  => self::get_billing_address_for_transcient(),
 			'shipping_address' => self::get_shipping_address_for_transcient(),
 			'payment_method'   => array(
@@ -384,50 +394,44 @@ class Cart_Handler_Controller {
 			__DIR__ . '/transcient.json',
 			"
         \n   " .
-			json_encode( $transient_value ),
+				json_encode($transient_value),
 			FILE_APPEND
 		);
-		\set_transient( $temporary_order_id, $transient_value, self::days_in_secs( 2 ) );
+		\set_transient($temporary_order_id, $transient_value, self::days_in_secs(2));
 
-		$email = isset( $_POST['rkfl_checkout_email'] ) ? sanitize_email( wp_unslash( $_POST['rkfl_checkout_email'] ) ) : '';
+		$email = isset($_POST['shark_processing_checkout_email']) ? sanitize_email(wp_unslash($_POST['shark_processing_checkout_email'])) : '';
 
-		$partial_payment_cache_key = 'rkfl_partial_payment_cache_' . $email;
+		$partial_payment_cache_key = 'shark_processing_partial_payment_cache_' . $email;
 
-		$_rkfl_partial_payment_cache = get_option( $partial_payment_cache_key );
+		$_rkfl_partial_payment_cache = get_option($partial_payment_cache_key);
 
-		file_put_contents(
-			__DIR__ . '/partial_log.json',
-			"
-                   \n      rkfl_partial_payment_cache" .
-			json_encode( $_rkfl_partial_payment_cache ),
-			FILE_APPEND
-		);
+
 
 		$merchant_cred = array(
 			'email'    => $gateway->email,
 			'password' => $gateway->password,
 		);
 
-		$firstname = isset( $_POST['rkfl_checkout_firstname'] ) ? sanitize_text_field( wp_unslash( $_POST['rkfl_checkout_firstname'] ) ) : '';
+		$firstname = isset($_POST['shark_processing_checkout_firstname']) ? sanitize_text_field(wp_unslash($_POST['shark_processing_checkout_firstname'])) : '';
 
-		$lastname = isset( $_POST['rkfl_checkout_lastname'] ) ? sanitize_text_field( wp_unslash( $_POST['rkfl_checkout_lastname'] ) ) : '';
+		$lastname = isset($_POST['shark_processing_checkout_lastname']) ? sanitize_text_field(wp_unslash($_POST['shark_processing_checkout_lastname'])) : '';
 
 		$shipping_address = self::sort_shipping_address();
 
 		$to_encrypt = array(
-			'email'     => isset( $email ) ? $email : ( ! is_null( $shipping_address ) ? $shipping_address['email'] : '' ),
+			'email'     => isset($email) ? $email : (!is_null($shipping_address) ? $shipping_address['email'] : ''),
 
-			'firstName' => isset( $firstname ) ? $firstname : ( ! is_null( $shipping_address ) ? $shipping_address['firstname'] : '' ),
+			'firstName' => isset($firstname) ? $firstname : (!is_null($shipping_address) ? $shipping_address['firstname'] : ''),
 
-			'lastName'  => isset( $lastname ) ? $lastname : ( ! is_null( $shipping_address ) ? $shipping_address['lastname'] : '' ),
+			'lastName'  => isset($lastname) ? $lastname : (!is_null($shipping_address) ? $shipping_address['lastname'] : ''),
 		);
 
-		$encrypted_req = $gateway->get_encrypted( json_encode( $to_encrypt ) );
+		$encrypted_req = $gateway->get_encrypted(json_encode($to_encrypt));
 
 		if (
-			( $_POST['rkfl_checkout_partial_tx_check'] == 'true' ) &&
+			($_POST['shark_processing_checkout_partial_tx_check'] == 'true') &&
 			$_rkfl_partial_payment_cache &&
-			isset( $_rkfl_partial_payment_cache['temporary_order_id'] )
+			isset($_rkfl_partial_payment_cache['temporary_order_id'])
 		) {
 
 			$query = self::get_posts(
@@ -441,14 +445,14 @@ class Cart_Handler_Controller {
 				__DIR__ . '/partial_log.json',
 				"
                 \n      Howm= many was gotten" .
-				count( $query->posts ),
+					count($query->posts),
 				FILE_APPEND
 			);
 
-			if ( count( $query->posts ) > 0 ) {
+			if (count($query->posts) > 0) {
 				// if order exists
 
-				delete_option( 'rkfl_partial_payment_cache_' . $email );
+				delete_option('shark_processing_partial_payment_cache_' . $email);
 			} else {
 
 				$auth_pass = Process_Payment_Controller::auth(
@@ -458,25 +462,25 @@ class Cart_Handler_Controller {
 					)
 				);
 
-				if ( is_wp_error( $auth_pass ) ) {
-					wp_send_json_success( rest_ensure_response( $auth_pass ) );
+				if (is_wp_error($auth_pass)) {
+					wp_send_json_success(rest_ensure_response($auth_pass));
 				}
 
-				$response_code = wp_remote_retrieve_response_code( $auth_pass );
+				$response_code = wp_remote_retrieve_response_code($auth_pass);
 
-				$response_body = wp_remote_retrieve_body( $auth_pass );
+				$response_body = wp_remote_retrieve_body($auth_pass);
 
-				$result = json_decode( $response_body );
+				$result = json_decode($response_body);
 
-				if ( $response_code != '200' ) {
+				if ($response_code != '200') {
 					$error_message = 'Authorization cannot be completed';
 
-					wc_add_notice( __( $error_message, 'rocketfuel-payment-gateway' ), 'error' );
+					wc_add_notice(__($error_message, 'shark-processing-payment-gateway'), 'error');
 
 					return wp_send_json_error(
 						array(
 							'error'    => true,
-							'messages' => array( $error_message ),
+							'messages' => array($error_message),
 						)
 					);
 				}
@@ -495,24 +499,21 @@ class Cart_Handler_Controller {
 					__DIR__ . '/partial_log.json',
 					"
                     \n      What url for partial" .
-					$url,
+						$url,
 					FILE_APPEND
 				);
-				$result = wp_remote_get( $url, $args );
+				$result = wp_remote_get($url, $args);
 
-				$response_code = wp_remote_retrieve_response_code( $result );
+				$response_code = wp_remote_retrieve_response_code($result);
 
-				if ( (int) $response_code === 200 ) {
+				if ((int) $response_code === 200) {
 
-					// $error_message = 'Could not retrieve Partial Payment';
 
-					// wc_add_notice( __( $error_message, 'rocketfuel-payment-gateway' ), 'error' );
+					$response_string = wp_remote_retrieve_body($result);
 
-					$response_string = wp_remote_retrieve_body( $result );
+					$response_body = json_decode($response_string);
 
-					$response_body = json_decode( $response_string );
-
-					if ( isset( $response_body->result->tx ) && ! is_null( $response_body->result->tx ) && (int) $response_body->result->tx->status === 101 && (int) $response_body->result->paymentLinkStatus === 1 && self::compare_cart_partial_tx( $response_body->result->tx ) ) {
+					if (isset($response_body->result->tx) && !is_null($response_body->result->tx) && (int) $response_body->result->tx->status === 101 && (int) $response_body->result->paymentLinkStatus === 1 && self::compare_cart_partial_tx($response_body->result->tx)) {
 
 						wp_send_json_success(
 							array(
@@ -532,7 +533,7 @@ class Cart_Handler_Controller {
 			}
 		}
 
-		$cart = $gateway->sort_cart( WC()->cart->get_cart(), $temporary_order_id );
+		$cart = $gateway->sort_cart(WC()->cart->get_cart(), $temporary_order_id);
 
 		$data = array(
 			'cred'     => $merchant_cred,
@@ -542,47 +543,47 @@ class Cart_Handler_Controller {
 				'cart'            => $cart,
 				'merchant_id'     => $gateway->merchant_id,
 				'shippingAddress' => $shipping_address,
-				'currency'        => get_woocommerce_currency( 'USD' ),
+				'currency'        => get_woocommerce_currency('USD'),
 				'order'           => (string) $temporary_order_id,
 				'redirectUrl'     => '',
 			),
 		);
 
-		unset( $gateway );
+		unset($gateway);
 
 		$error_message = 'Payment cannot be completed';
 
 		try {
-			$payment_response = Process_Payment_Controller::process_payment( $data );
-			if ( is_wp_error( $payment_response ) ) {
-				return rest_ensure_response( $payment_response );
+			$payment_response = Process_Payment_Controller::process_payment($data);
+			if (is_wp_error($payment_response)) {
+				return rest_ensure_response($payment_response);
 			}
 
-			if ( ! $payment_response ) {
+			if (!$payment_response) {
 				return wp_send_json_error(
 					array(
 						'error'    => true,
-						'messages' => array( $error_message ),
+						'messages' => array($error_message),
 					)
 				);
 			}
 
-			if ( ( isset( $payment_response->error ) && $payment_response->error === true ) ) {
+			if ((isset($payment_response->error) && $payment_response->error === true)) {
 				// file_put_contents(__DIR__.'/log.json','the error',FILE_APPEND);
 				try {
 					wp_send_json_error(
 						array(
 							'error'    => true,
-							'messages' => array( isset( $payment_response->message ) ? $payment_response->message : $error_message ),
-							'data'     => isset( $payment_response->data ) ? $payment_response->data : null,
+							'messages' => array(isset($payment_response->message) ? $payment_response->message : $error_message),
+							'data'     => isset($payment_response->data) ? $payment_response->data : null,
 						)
 					);
-				} catch ( \Error $e ) {
+				} catch (\Error $e) {
 
 					wp_send_json_error(
 						array(
 							'error'    => true,
-							'messages' => array( 'Fatal Request Error' ),
+							'messages' => array('Fatal Request Error'),
 							'data'     => null,
 						)
 					);
@@ -590,14 +591,14 @@ class Cart_Handler_Controller {
 			}
 			// {"temporary_order_id":"84f7809bde45a1b6de15ae93a6e4bf4a","uuid":"2219ab84-f8b4-45d6-abb9-1c9da38a461e"}
 			update_option(
-				'rkfl_partial_payment_cache_' . $email,
+				'shark_processing_partial_payment_cache_' . $email,
 				array(
 					'temporary_order_id' => $temporary_order_id,
 					'uuid'               => $payment_response->result->uuid,
 				),
 				false
 			);
-			// update_option( 'rkfl_partial_payment_cache_'.$email,
+			// update_option( 'shark_processing_partial_payment_cache_'.$email,
 			// array(
 			// 'temporary_order_id' => '84f7809bde45a1b6de15ae93a6e4bf4a',
 			// 'uuid'=>'2219ab84-f8b4-45d6-abb9-1c9da38a461e'
@@ -611,36 +612,38 @@ class Cart_Handler_Controller {
 					'uuid'               => $payment_response,
 				)
 			);
-		} catch ( \Throwable $th ) {
+		} catch (\Throwable $th) {
 
 			return wp_send_json_error(
 				array(
 					'error'    => true,
-					'messages' => array( 'Fatal Request Error' ),
+					'messages' => array('Fatal Request Error'),
 					'data'     => null,
 				)
 			);
 		}
 	}
-	public static function rocketfuel_process_checkout() {
+	public static function shark_processing_process_checkout()
+	{
 
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], '_wc_rkfl_start_checkout_nonce' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-			wp_die( __( 'Cheatin&#8217; huh?', 'woocommerce-gateway-paypal-express-checkout' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if (empty($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], '_wc_shark_processing_start_checkout_nonce')) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			wp_die(__('Cheatin&#8217; huh?', 'woocommerce-gateway-paypal-express-checkout')); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		// Intercept process_checkout call to exit after validation.
-		add_action( 'woocommerce_after_checkout_validation', array( __CLASS__, 'maybe_start_checkout' ), 10, 2 );
+		add_action('woocommerce_after_checkout_validation', array(__CLASS__, 'maybe_start_checkout'), 10, 2);
 
 		WC()->checkout->process_checkout();
 	}
-	private static function checkProductForSub( $cart ) {
+	private static function checkProductForSub($cart)
+	{
 		$result = false;
 
-		foreach ( $cart as $cart_item ) {
+		foreach ($cart as $cart_item) {
 
-			$_product = wc_get_product( $cart_item['product_id'] );
+			$_product = wc_get_product($cart_item['product_id']);
 
-			if ( class_exists( 'WC_Subscriptions_Product' ) && \WC_Subscriptions_Product::is_subscription( $_product ) ) {
+			if (class_exists('WC_Subscriptions_Product') && \WC_Subscriptions_Product::is_subscription($_product)) {
 				$result = true;
 			}
 		}
@@ -651,37 +654,38 @@ class Cart_Handler_Controller {
 	 *
 	 * @since 1.6.4
 	 */
-	public static function maybe_start_checkout( $data, $errors = null ) {
-		if ( is_null( $errors ) ) {
+	public static function maybe_start_checkout($data, $errors = null)
+	{
+		if (is_null($errors)) {
 			// Compatibility with WC <3.0: get notices and clear them so they don't re-appear.
-			$error_messages = wc_get_notices( 'error' );
+			$error_messages = wc_get_notices('error');
 			wc_clear_notices();
 		} else {
 			$error_messages = $errors->get_error_messages();
 		}
 		try {
 
-			$billing_email = isset( $_POST['billing_email'] ) ? sanitize_text_field( wp_unslash( $_POST['billing_email'] ) ) : '';
+			$billing_email = isset($_POST['billing_email']) ? sanitize_text_field(wp_unslash($_POST['billing_email'])) : '';
 
 			if (
-				! empty( $billing_email ) &&
-				email_exists( $billing_email ) &&
-				( ! is_user_logged_in() ||
-					( is_user_logged_in() &&
-						wp_get_current_user()->user_email !== $billing_email )
-				) && self::checkProductForSub( WC()->cart->get_cart() )
+				!empty($billing_email) &&
+				email_exists($billing_email) &&
+				(!is_user_logged_in() ||
+					(is_user_logged_in() &&
+						wp_get_current_user()->user_email !== $billing_email)
+				) && self::checkProductForSub(WC()->cart->get_cart())
 			) {
 				$error_messages[] = 'An account is already registered with your email. Kindly login';
 			}
-		} catch ( \Throwable $th ) {
+		} catch (\Throwable $th) {
 			$error_messages = $th->getMessage();
 		}
 
-		if ( empty( $error_messages ) ) {
-			self::set_customer_data( wc_clean( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			self::start_checkout( false );
+		if (empty($error_messages)) {
+			self::set_customer_data(wc_clean($_POST)); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			self::start_checkout(false);
 		} else {
-			wp_send_json_error( array( 'messages' => $error_messages ) );
+			wp_send_json_error(array('messages' => $error_messages));
 		}
 		exit;
 	}
@@ -692,11 +696,12 @@ class Cart_Handler_Controller {
 	 *
 	 * @since 1.6.4
 	 */
-	protected static function start_checkout() {
+	protected static function start_checkout()
+	{
 		try {
 			self::process_user_data();
-		} catch ( \Error $e ) {
-			wp_send_json_error( array( 'messages' => array( $e->getMessage() ) ) );
+		} catch (\Error $e) {
+			wp_send_json_error(array('messages' => array($e->getMessage())));
 		}
 	}
 	/**
@@ -704,33 +709,34 @@ class Cart_Handler_Controller {
 	 *
 	 * @since 1.6.4
 	 */
-	protected static function set_customer_data( $data ) {
+	protected static function set_customer_data($data)
+	{
 		$customer = WC()->customer;
 
-        // phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingBefore
-		$billing_first_name = empty( $data['billing_first_name'] ) ? '' : wc_clean( $data['billing_first_name'] );
-		$billing_last_name  = empty( $data['billing_last_name'] )  ? '' : wc_clean( $data['billing_last_name'] );
-		$billing_country    = empty( $data['billing_country'] )    ? '' : wc_clean( $data['billing_country'] );
-		$billing_address_1  = empty( $data['billing_address_1'] )  ? '' : wc_clean( $data['billing_address_1'] );
-		$billing_address_2  = empty( $data['billing_address_2'] )  ? '' : wc_clean( $data['billing_address_2'] );
-		$billing_city       = empty( $data['billing_city'] )       ? '' : wc_clean( $data['billing_city'] );
-		$billing_state      = empty( $data['billing_state'] )      ? '' : wc_clean( $data['billing_state'] );
-		$billing_postcode   = empty( $data['billing_postcode'] )   ? '' : wc_clean( $data['billing_postcode'] );
-		$billing_phone      = empty( $data['billing_phone'] )      ? '' : wc_clean( $data['billing_phone'] );
-		$billing_email      = empty( $data['billing_email'] )      ? '' : wc_clean( $data['billing_email'] );
-        // phpcs:enable
+		// phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingBefore
+		$billing_first_name = empty($data['billing_first_name']) ? '' : wc_clean($data['billing_first_name']);
+		$billing_last_name  = empty($data['billing_last_name'])  ? '' : wc_clean($data['billing_last_name']);
+		$billing_country    = empty($data['billing_country'])    ? '' : wc_clean($data['billing_country']);
+		$billing_address_1  = empty($data['billing_address_1'])  ? '' : wc_clean($data['billing_address_1']);
+		$billing_address_2  = empty($data['billing_address_2'])  ? '' : wc_clean($data['billing_address_2']);
+		$billing_city       = empty($data['billing_city'])       ? '' : wc_clean($data['billing_city']);
+		$billing_state      = empty($data['billing_state'])      ? '' : wc_clean($data['billing_state']);
+		$billing_postcode   = empty($data['billing_postcode'])   ? '' : wc_clean($data['billing_postcode']);
+		$billing_phone      = empty($data['billing_phone'])      ? '' : wc_clean($data['billing_phone']);
+		$billing_email      = empty($data['billing_email'])      ? '' : wc_clean($data['billing_email']);
+		// phpcs:enable
 
-		if ( isset( $data['ship_to_different_address'] ) ) {
-            // phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingBefore
-			$shipping_first_name = empty( $data['shipping_first_name'] ) ? '' : wc_clean( $data['shipping_first_name'] );
-			$shipping_last_name  = empty( $data['shipping_last_name'] )  ? '' : wc_clean( $data['shipping_last_name'] );
-			$shipping_country    = empty( $data['shipping_country'] )    ? '' : wc_clean( $data['shipping_country'] );
-			$shipping_address_1  = empty( $data['shipping_address_1'] )  ? '' : wc_clean( $data['shipping_address_1'] );
-			$shipping_address_2  = empty( $data['shipping_address_2'] )  ? '' : wc_clean( $data['shipping_address_2'] );
-			$shipping_city       = empty( $data['shipping_city'] )       ? '' : wc_clean( $data['shipping_city'] );
-			$shipping_state      = empty( $data['shipping_state'] )      ? '' : wc_clean( $data['shipping_state'] );
-			$shipping_postcode   = empty( $data['shipping_postcode'] )   ? '' : wc_clean( $data['shipping_postcode'] );
-            // phpcs:enable
+		if (isset($data['ship_to_different_address'])) {
+			// phpcs:disable WordPress.WhiteSpace.OperatorSpacing.SpacingBefore
+			$shipping_first_name = empty($data['shipping_first_name']) ? '' : wc_clean($data['shipping_first_name']);
+			$shipping_last_name  = empty($data['shipping_last_name'])  ? '' : wc_clean($data['shipping_last_name']);
+			$shipping_country    = empty($data['shipping_country'])    ? '' : wc_clean($data['shipping_country']);
+			$shipping_address_1  = empty($data['shipping_address_1'])  ? '' : wc_clean($data['shipping_address_1']);
+			$shipping_address_2  = empty($data['shipping_address_2'])  ? '' : wc_clean($data['shipping_address_2']);
+			$shipping_city       = empty($data['shipping_city'])       ? '' : wc_clean($data['shipping_city']);
+			$shipping_state      = empty($data['shipping_state'])      ? '' : wc_clean($data['shipping_state']);
+			$shipping_postcode   = empty($data['shipping_postcode'])   ? '' : wc_clean($data['shipping_postcode']);
+			// phpcs:enable
 		} else {
 			$shipping_first_name = $billing_first_name;
 			$shipping_last_name  = $billing_last_name;
@@ -742,41 +748,41 @@ class Cart_Handler_Controller {
 			$shipping_postcode   = $billing_postcode;
 		}
 
-		$customer->set_shipping_country( $shipping_country );
-		$customer->set_shipping_address( $shipping_address_1 );
-		$customer->set_shipping_address_2( $shipping_address_2 );
-		$customer->set_shipping_city( $shipping_city );
-		$customer->set_shipping_state( $shipping_state );
-		$customer->set_shipping_postcode( $shipping_postcode );
+		$customer->set_shipping_country($shipping_country);
+		$customer->set_shipping_address($shipping_address_1);
+		$customer->set_shipping_address_2($shipping_address_2);
+		$customer->set_shipping_city($shipping_city);
+		$customer->set_shipping_state($shipping_state);
+		$customer->set_shipping_postcode($shipping_postcode);
 
-		if ( version_compare( \WC_VERSION, '3.0', '<' ) ) {
+		if (version_compare(\WC_VERSION, '3.0', '<')) {
 			$customer->shipping_first_name = $shipping_first_name;
 			$customer->shipping_last_name  = $shipping_last_name;
 			$customer->billing_first_name  = $billing_first_name;
 			$customer->billing_last_name   = $billing_last_name;
 
-			$customer->set_country( $billing_country );
-			$customer->set_address( $billing_address_1 );
-			$customer->set_address_2( $billing_address_2 );
-			$customer->set_city( $billing_city );
-			$customer->set_state( $billing_state );
-			$customer->set_postcode( $billing_postcode );
+			$customer->set_country($billing_country);
+			$customer->set_address($billing_address_1);
+			$customer->set_address_2($billing_address_2);
+			$customer->set_city($billing_city);
+			$customer->set_state($billing_state);
+			$customer->set_postcode($billing_postcode);
 			$customer->billing_phone = $billing_phone;
 			$customer->billing_email = $billing_email;
 		} else {
-			$customer->set_shipping_first_name( $shipping_first_name );
-			$customer->set_shipping_last_name( $shipping_last_name );
-			$customer->set_billing_first_name( $billing_first_name );
-			$customer->set_billing_last_name( $billing_last_name );
+			$customer->set_shipping_first_name($shipping_first_name);
+			$customer->set_shipping_last_name($shipping_last_name);
+			$customer->set_billing_first_name($billing_first_name);
+			$customer->set_billing_last_name($billing_last_name);
 
-			$customer->set_billing_country( $billing_country );
-			$customer->set_billing_address_1( $billing_address_1 );
-			$customer->set_billing_address_2( $billing_address_2 );
-			$customer->set_billing_city( $billing_city );
-			$customer->set_billing_state( $billing_state );
-			$customer->set_billing_postcode( $billing_postcode );
-			$customer->set_billing_phone( $billing_phone );
-			$customer->set_billing_email( $billing_email );
+			$customer->set_billing_country($billing_country);
+			$customer->set_billing_address_1($billing_address_1);
+			$customer->set_billing_address_2($billing_address_2);
+			$customer->set_billing_city($billing_city);
+			$customer->set_billing_state($billing_state);
+			$customer->set_billing_postcode($billing_postcode);
+			$customer->set_billing_phone($billing_phone);
+			$customer->set_billing_email($billing_email);
 		}
 	}
 }
